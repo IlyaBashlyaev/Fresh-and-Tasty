@@ -1,0 +1,5 @@
+{
+    "require": {
+        "interkassa/php-sdk": "^1.1"
+    }
+}
