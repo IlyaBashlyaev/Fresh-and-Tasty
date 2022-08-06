@@ -1,5 +1,14 @@
 <?php
-    $connection = new mysqli('127.0.0.1', 'admin', 'admin', 'restaurant');
+    $cleardb_url = parse_url(getenv('CLEARDB_DATABASE_URL'));
+    $cleardb_server = $cleardb_url['host'];
+    $cleardb_username = $cleardb_url['user'];
+    $cleardb_password = $cleardb_url['pass'];
+    $cleardb_db = substr($cleardb_url['path'], 1);
+
+    $active_group = 'default';
+    $query_builder = TRUE;
+
+    $connection = new mysqli($cleardb_server, $cleardb_username, $cleardb_password, $cleardb_db);
 
     if (isset($_COOKIE['products-id'])) {
         $productsId = explode(' ', $_COOKIE['products-id']);
@@ -14,9 +23,6 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0">
         <link rel="shortcut icon" href="images/icon.png">
-
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g==" crossorigin="anonymous" referrerpolicy="no-referrer">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
         crossorigin="anonymous"></script>
