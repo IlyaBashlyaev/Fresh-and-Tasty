@@ -386,7 +386,7 @@
 
             function showUserData() {
                 $.ajax({
-                    url: 'show-user-data.php',
+                    url: 'includes/show-user-data.php',
                     type: 'post',
                     data: {},
                     success: userData => {
