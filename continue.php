@@ -334,7 +334,7 @@
 
                 $code = rand(1000, 9999);
                 $senderUsername = 'ibashlyaev2000@gmail.com';
-                $senderPassword = 'vpuqtrjjtfepeept';
+                $senderPassword = 'peobsasdgavqtucn';
 
                 $mail = new PHPMailer();
                 $mail -> isSMTP();
