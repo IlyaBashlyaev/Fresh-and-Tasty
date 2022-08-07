@@ -386,7 +386,7 @@
 
             function showUserData() {
                 $.ajax({
-                    url: 'http://ilyabashlyaev-56325.portmap.host:56325/includes/show-user-data.php',
+                    url: 'show-user-data.php',
                     type: 'post',
                     data: {},
                     success: userData => {
