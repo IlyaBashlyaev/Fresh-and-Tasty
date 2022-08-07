@@ -303,14 +303,38 @@
         </nav>
 
         <script>
-            var theme = localStorage.getItem('theme'),
+            function setCookie(name, value, years) {
+                const date = new Date()
+                date.setTime(date.getTime() + (years * 31536000000))
+                var expires = 'expires=' + date.toUTCString()
+                document.cookie = `${name}=${value};${years};path=/`
+            }
+
+            function getCookie(name) {
+                name += '='
+                var cookie = document.cookie.split(';')
+
+                for(var i = 0; i < cookie.length; i++) {
+                    var c = cookie[i]
+
+                    while (c.charAt(0) == ' ')
+                        c = c.substring(1)
+                    
+                    if (c.indexOf(name) == 0)
+                        return c.substring(name.length, c.length)
+                }
+
+                return ''
+            }
+
+            var theme = getCookie('theme'),
                 totalPrice = <?= $totalPrice ?>, timer
 
             if (theme == 'dark' || !theme) {
                 const icon = document.querySelector('.header__user-dark-mode')
                 document.body.className = 'dark'
                 icon.innerHTML = '<i class="far fa-moon"></i>'
-                localStorage.setItem('theme', 'dark')
+                setCookie('theme', 'dark', 10)
             }
 
             function showPopup() {
@@ -446,9 +470,9 @@
                 document.body.classList.toggle('dark')
 
                 if (document.body.className == 'dark')
-                    localStorage.setItem('theme', 'dark')
+                    setCookie('theme', 'dark', 10)
                 else
-                    localStorage.setItem('theme', 'light')
+                    setCookie('theme', 'light', 10)
 
                 location.reload()
             }

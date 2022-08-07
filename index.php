@@ -5,6 +5,7 @@
         $productsId = explode(' ', $_COOKIE['products-id']);
         setcookie('products-id', '', time() - 3600);
     }
+
 ?>
 
 <!DOCTYPE html>
@@ -792,7 +793,6 @@ Products that have been purchased by a customer:<br>";
             setSettingsHeight()
 
             function addToCart(productId) {
-                console.log(productId)
                 if ('<?= $userId ?>') {
                     $.ajax({
                         url: 'includes/add-to-cart.php',
