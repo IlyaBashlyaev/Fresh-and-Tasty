@@ -6,9 +6,6 @@
         $cleardb_password = $cleardb_url['pass'];
         $cleardb_db = substr($cleardb_url['path'], 1);
 
-        $active_group = 'default';
-        $query_builder = TRUE;
-
         $connection = new mysqli($cleardb_server, $cleardb_username, $cleardb_password, $cleardb_db);
         $productId = $_POST['productId'];
         $quantity = (int) $_POST['quantity'];
