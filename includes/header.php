@@ -153,7 +153,7 @@
                                                                 <input type="number" class="popup__quantity" oninput="changeQuantity(this, '<?= $id ?>')" value="<?= $repeatedId ?>">
 
                                                                 <div class="popup__sidebar">
-                                                                    <img class="popup__image" src="http://ilyabashlyaev-56325.portmap.host:56325/<?= $product['image'] ?>">
+                                                                    <img class="popup__image" src="/<?= $product['image'] ?>">
 
                                                                     <div class="popup__remove" onclick="removeProduct('<?= $id ?>')">
                                                                         <i class="far"></i>
