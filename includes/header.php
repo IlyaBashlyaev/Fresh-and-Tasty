@@ -345,7 +345,7 @@
 
             function removeProduct(productId) {
                 $.ajax({
-                    url: 'http://ilyabashlyaev-56325.portmap.host:56325/includes/remove-product.php',
+                    url: '/includes/remove-product.php',
                     type: 'post',
                     data: {productId: productId},
                     success: priceBlock => {
@@ -380,7 +380,7 @@
                 }
 
                 $.ajax({
-                    url: 'http://ilyabashlyaev-56325.portmap.host:56325/includes/change-quantity.php',
+                    url: '/includes/change-quantity.php',
                     type: 'post',
                     data: {
                         productId: productId,
@@ -410,7 +410,7 @@
 
             function showUserData() {
                 $.ajax({
-                    url: 'includes/show-user-data.php',
+                    url: '/includes/show-user-data.php',
                     type: 'post',
                     data: {},
                     success: userData => {
@@ -419,7 +419,8 @@
                         var username = userData[0],
                             email = userData[1]
                         
-                        alert(`Username: ${username}\nEmail: ${email}`)
+                        if (webView)
+                            alert(`Username: ${username}\nEmail: ${email}`)
                     }
                 })
             }

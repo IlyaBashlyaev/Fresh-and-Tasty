@@ -5,7 +5,6 @@
         $productsId = explode(' ', $_COOKIE['products-id']);
         setcookie('products-id', '', time() - 3600);
     }
-
 ?>
 
 <!DOCTYPE html>
@@ -28,15 +27,21 @@
         
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/global.css">
-        <title>Shop</title>
+        <title>Fresh and Tasty</title>
     </head>
 
     <body id='body' onmouseup="isMouseDown = false">
-        <?php require 'includes/header.php'; ?>
+        <?php
+            require 'includes/header.php';
+            echo '<script>var webView = ';
 
-        <script>
-            var isMouseDown, element
-        </script>
+            if (isset($_SERVER['HTTP_X_REQUESTED_WITH']))
+                echo 'true';
+            else
+                echo 'false';
+
+            echo '; var isMouseDown, element;</script>'
+        ?>
 
         <main class="content">
             <div class="container">
@@ -191,7 +196,8 @@ Products that have been purchased by a customer:<br>";
                                     ?>
 
                                     <script>
-                                        alert('Products have been successfully purchased. Wait for feedback from our worker.')
+                                        if (!webView)
+                                            alert('Products have been successfully purchased. Wait for feedback from our worker.')
                                     </script>
 
                                     <?php
@@ -795,14 +801,16 @@ Products that have been purchased by a customer:<br>";
             function addToCart(productId) {
                 if ('<?= $userId ?>') {
                     $.ajax({
-                        url: 'includes/add-to-cart.php',
+                        url: '/includes/add-to-cart.php',
                         type: 'post',
                         data: {
                             userId: '<?= $userId ?>',
                             productId: productId
                         },
                         success: () => {
-                            alert('The product was successfully added to the cart.')
+                            if (!webView)
+                                alert('The product was successfully added to the cart.')
+                            
                             location.reload()
                         }
                     })

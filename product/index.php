@@ -20,7 +20,7 @@
         
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="../css/global.css">
-        <title>Shop - Product</title>
+        <title>Fresh and Tasty - Product</title>
     </head>
 
     <body id='body'>
@@ -180,7 +180,7 @@
 
                                     function onlineCounter() {
                                         $.ajax({
-                                            url: '../online-counter.php',
+                                            url: '/online-counter.php',
                                             type: 'post',
                                             data: {},
                                             success: () => {}
@@ -255,7 +255,7 @@
                                     function addToCart() {
                                         if ('<?= $userId ?>') {
                                             $.ajax({
-                                                url: '../includes/add-to-cart.php',
+                                                url: '/includes/add-to-cart.php',
                                                 type: 'post',
                                                 data: {
                                                     userId: '<?= $userId ?>',
