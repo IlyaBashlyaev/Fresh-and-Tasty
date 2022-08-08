@@ -248,6 +248,8 @@ li {
   width: 16px;
   height: 16px;
   background-image: url(../images/arr-down.svg);
+  background-position: center;
+  background-repeat: no-repeat;
   top: 16%;
   left: 104%;
 }
