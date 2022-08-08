@@ -201,6 +201,8 @@
                                         }
                                     }
                                 }
+
+                                echo "Some text ...";
                             ?>
 
                             <a class="header__user-account" <?php
