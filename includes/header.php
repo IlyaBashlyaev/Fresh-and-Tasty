@@ -1,4 +1,11 @@
-<script src="https://cdn.jsdelivr.net/npm/jquery.redirect@1.1.4/jquery.redirect.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery.redirect@1.1.4/jquery.redirect.min.js"></script>
+
+        <?php
+            if (isset($_SERVER['HTTP_X_REQUESTED_WITH']))
+                echo '<script>var webView = true;</script>';
+            else
+                echo '<script>var webView = false;</script>';
+        ?>
 
         <header class="header">
             <div class="container header__container">
