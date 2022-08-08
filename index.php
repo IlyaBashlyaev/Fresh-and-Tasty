@@ -729,13 +729,15 @@ Products that have been purchased by a customer:<br>";
 
                     if (mainClientRect.top <= 0 && mainBottom >= 0) {
                         if (window.scrollY > lastScrollY) {
-                            if (settingsBottom < 0 && settings.clientHeight > window.innerHeight) {
+                            console.log([settingsBottom, settings.clientHeight, window.innerHeight])
+                            if (settingsBottom < 0 && settings.clientHeight < window.innerHeight) {
                                 settings.style.marginTop = -mainClientRect.top - (settings.clientHeight - window.innerHeight) + 'px'
                             }
                         }
 
                         else {
-                            if (settingsClientRect.top > 0 && settings.clientHeight > window.innerHeight) {
+                            console.log([settingsClientRect.top, settings.clientHeight, window.innerHeight])
+                            if (settingsClientRect.top > 0 && settings.clientHeight < window.innerHeight) {
                                 settings.style.marginTop = -mainClientRect.top + 'px'
                             }
                         }

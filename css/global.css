@@ -587,16 +587,19 @@ li {
 }
 
 .navigation__list {
-  height: 55px;
+  min-height: 55px;
+  max-height: 165px;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
   gap: 20px;
 }
 
 .navigation__list-item {
   position: relative;
   width: 120px;
+  height: 55px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -619,23 +622,22 @@ li {
 }
 
 .navigation__list-item:hover {
-  top: 76px;
-  height: 175px;
+  top: 16px;
   align-items: flex-start;
 }
 
 .navigation__list-item:hover .drop-list {
   transition: z-index 0s, opacity .5s;
-  opacity: 1;
   top: 39px;
   z-index: 1;
+  opacity: 1;
 }
 
 .drop-list {
   transition: z-index 0s .5s, opacity .5s;
   position: absolute;
   opacity: 0;
-  top: 39px;
+  top: 55px;
   background-color: #f1f1f1;
   min-width: 120px;
   height: 120px;
