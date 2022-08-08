@@ -1,11 +1,12 @@
 <?php
     if (isset($_POST['userId']) && isset($_POST['productId'])) {
+        require '../db.php';
+        
         $userId = $_POST['userId'];
         $productId = $_POST['productId'];
 
-        require '../db.php';
         $userCart = $connection -> query("SELECT * FROM `user-carts` WHERE `user-id` = '$userId'")
-                     -> fetch_assoc();
+                    -> fetch_assoc();
 
         if ($userCart) {
             $userCartId = $userCart['user-id'];
