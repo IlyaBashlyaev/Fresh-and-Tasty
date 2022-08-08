@@ -802,7 +802,7 @@ Products that have been purchased by a customer:<br>";
                 if ('<?= $userId ?>') {
                     $.ajax({
                         url: '/includes/add-to-cart.php',
-                        type: 'post',
+                        type: 'get',
                         data: {
                             userId: '<?= $userId ?>',
                             productId: productId

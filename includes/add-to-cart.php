@@ -1,9 +1,9 @@
 <?php
-    if (isset($_POST['userId']) && isset($_POST['productId'])) {
+    if (isset($_GET['userId']) && isset($_GET['productId'])) {
         require '../db.php';
         
-        $userId = $_POST['userId'];
-        $productId = $_POST['productId'];
+        $userId = $_GET['userId'];
+        $productId = $_GET['productId'];
 
         $userCart = $connection -> query("SELECT * FROM `user-carts` WHERE `user-id` = '$userId'")
                     -> fetch_assoc();
