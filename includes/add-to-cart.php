@@ -21,7 +21,7 @@
 
         else {
             $connection -> query("INSERT INTO `user-carts` (`user-id`, `products-id`) VALUES (
-                '$userId', '[\'$productId\']'
+                '$userId', '[\"$productId\"]'
             )");
         }
     }

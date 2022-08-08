@@ -87,7 +87,6 @@
                                 }
 
                                 else if (isset($_COOKIE['guest-id'])) {
-                                    echo "Some text ...";
                                     $userId = $_COOKIE['guest-id'];
                                     $user = $connection -> query("SELECT * FROM `user-carts` WHERE `user-id` = '$userId'")
                                             -> fetch_assoc();
