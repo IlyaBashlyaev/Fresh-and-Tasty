@@ -426,7 +426,7 @@
                         var username = userData[0],
                             email = userData[1]
                         
-                        if (webView)
+                        if (!webView)
                             alert(`Username: ${username}\nEmail: ${email}`)
                     }
                 })
