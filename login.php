@@ -7,6 +7,7 @@
 
         <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" crossorigin="anonymous">
 
         <link rel="shortcut icon" href="images/icon.png">
         <link rel="stylesheet" href="style.css">
@@ -24,12 +25,17 @@
             </div>
         </div>
 
+        <div class="theme-block">
+            <i class="far fa-sun"></i>
+        </div>
+
         <div class="bg" style="background-image: url(http://unsplash.it/1920/1080?gravity=center); width: 125vw; height: 125vh;"></div>
 
         <?php
             if (isset($_POST['username'])) {
                 $username = $_POST['username'];
                 $email = $_POST['email'];
+                $phone = $_POST['phone'];
                 $password = $_POST['password'];
             }
         ?>
@@ -57,6 +63,14 @@
                             if (isset($email)) {echo " value='$email' ";}
                         ?>
                     maxlength="100">
+                </div>
+
+                <div class="form-input phone" onclick='inputClick(1)'>
+                    <input name='phone' type='phone' class="inner-form-input phone" placeholder="Enter phone:" onclick="wrongClick(this)"
+                        <?php
+                            if (isset($email)) {echo " value='$phone' ";}
+                        ?>
+                    maxlength="16">
                 </div>
 
                 <div class="form-input password" onclick='inputClick(2)'>
@@ -101,15 +115,48 @@
             var isFormEmail = false
             var isFormPassword = false
 
+            var theme = getCookie('theme')
             var lastModeIndex = 0
             var lastFormIndex = 0
             var button
 
             const a = document.createElement('a')
             const bg = document.querySelector('.bg')
+            const form = document.querySelector('form')
+            const themeBlock = document.querySelector('.theme-block')
 
             var formInput
             var Value
+
+            if (theme == 'dark' || !theme) {
+                document.body.className = 'dark'
+                themeBlock.innerHTML = '<i class="far fa-moon"></i>'
+                setCookie('theme', 'dark')
+            }
+
+            function setCookie(name, value) {
+                const date = new Date()
+                date.setTime(date.getTime() + 315360000000)
+                var expires = 'expires=' + date.toUTCString()
+                document.cookie = `${name}=${value};${expires};10;path=/`
+            }
+
+            function getCookie(name) {
+                name += '='
+                var cookie = document.cookie.split(';')
+
+                for(var i = 0; i < cookie.length; i++) {
+                    var c = cookie[i]
+
+                    while (c.charAt(0) == ' ')
+                        c = c.substring(1)
+                    
+                    if (c.indexOf(name) == 0)
+                        return c.substring(name.length, c.length)
+                }
+
+                return ''
+            }
 
             function changeMode(modeIndex) {
                 const sign = document.querySelectorAll('.sign')
@@ -118,7 +165,6 @@
                     sign[modeIndex].classList.add('clicked')
                     sign[lastModeIndex].classList.remove('clicked')
 
-                    const form = document.querySelector('form')
                     var input = form.querySelector('input[name="modeIndex"]')
                     input.value = '' + modeIndex
 
@@ -127,7 +173,7 @@
                     const email = document.querySelector('form > .email')
 
                     if (modeIndex == 1) {
-                        form.style.height = '63vh'
+                        form.style.height = '79vh'
                         login.innerText = 'Sign In'
 
                         username.style.display = 'none'
@@ -136,7 +182,7 @@
                     }
 
                     else {
-                        form.style.height = '79vh'
+                        form.style.height = '93vh'
                         login.innerText = 'Sign Up'
 
                         username.style.display = 'flex'
@@ -159,7 +205,6 @@
             }
 
             function addAlert(text) {
-                const form = document.querySelector('form')
                 form.style.filter = 'blur(25px)'
 
                 const alert = document.querySelector('.alert')
@@ -176,7 +221,6 @@
             }
 
             function removeAlert() {
-                const form = document.querySelector('form')
                 form.style.filter = 'none'
 
                 const alert = document.querySelector('.alert')
@@ -215,15 +259,22 @@
                             return
                         }
 
-                        Value = Value.split('@')
-                        Value = [Value[0].split('+')[0], Value[1]]
-                        Value[0] = Value[0].split('.').join('')
-                        Value = Value.join('@').toLowerCase()
+                        formInput.value = Value
+                    }
+
+                    else if (index == 2) {
+                        var isPhone = validatePhone(Value)
+
+                        if (!isEmail) {
+                            formInput.classList.add('wrong')
+                            addAlert('You phone number is uncorrect')
+                            return
+                        }
+
                         formInput.value = Value
                     }
                 }
 
-                const form = document.querySelector('form')
                 const alert = document.querySelector('.alert')
                 alert.style.zIndex = '1'
 
@@ -242,18 +293,24 @@
 
             function validateEmail(email) {
                 const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                return re.test(String(email).toLowerCase())
+                return re.test(String(email))
             }
 
+            function validatePhone(phone) {
+                var re = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/
+                return re.test(phone)
+            }
+
+
             function changePassword(_isPassword) {
-                const input = document.querySelectorAll('.inner-form-input:not(.code)')[2]
+                const input = document.querySelectorAll('.inner-form-input:not(.code)')[3]
                 const img = document.querySelector('.form-input-img div')
 
                 if (_isPassword) {
                     input.type = 'text'
                     img.style.backgroundImage = 'url("static/opened_eye.png")'
                 }
-                
+
                 else {
                     input.type = 'password'
                     img.style.backgroundImage = 'url("static/closed_eye.png")'
@@ -302,6 +359,20 @@
                     removeAlert()
                 }
             })
+
+            themeBlock.onclick = () => {
+                document.body.classList.toggle('dark')
+
+                if (document.body.className == 'dark') {
+                    themeBlock.innerHTML = '<i class="far fa-moon"></i>'
+                    setCookie('theme', 'dark')
+                }
+
+                else {
+                    themeBlock.innerHTML = '<i class="far fa-sun"></i>'
+                    setCookie('theme', 'light')
+                }
+            }
         </script>
 
         <?php

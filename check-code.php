@@ -12,6 +12,7 @@
         if (( $user = $users -> fetch_assoc() )) {
             $id = $user['id'];
             $username = $user['username'];
+            $phone = $user['phone'];
             $hashedPassword = $user['password'];
 
             $connection -> query(
@@ -33,8 +34,8 @@
                 }
 
                 $connection -> query(
-                    "INSERT INTO `users` (`id`, `secret-id`, `username`, `email`, `password`) VALUES (
-                        '$id', '$secretId', '$username', '$email', '$hashedPassword'
+                    "INSERT INTO `users` (`id`, `secret-id`, `username`, `email`, `password`, `phone`) VALUES (
+                        '$id', '$secretId', '$username', '$email', '$hashedPassword', '$phone'
                     )"
                 );
             }
@@ -55,6 +56,7 @@
                 <input name='type' value="User">
                 <input name='username'>
                 <input name="email" value="<?= $email ?>">
+                <input name="phone" value="<?= $phone ?>">
                 <input name='password'>
                 <input name="modeIndex" value="<?= $modeIndex ?>">
                 <input name='alert'>

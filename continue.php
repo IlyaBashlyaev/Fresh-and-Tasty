@@ -51,6 +51,10 @@
                     <input name='email' type='email' class="inner-form-input email" placeholder="Enter email:">
                 </div>
 
+                <div class="form-input phone">
+                    <input name='phone' type='phone' class="inner-form-input phone" placeholder="Enter phone:">
+                </div>
+
                 <div class="form-input password">
                     <input name='password' type='password' class="inner-form-input password" placeholder="Enter password:">
 
@@ -65,6 +69,41 @@
                 </div>
             </form>
         </main>
+
+        <script>
+            function setCookie(name, value) {
+                const date = new Date()
+                date.setTime(date.getTime() + 315360000000)
+                var expires = 'expires=' + date.toUTCString()
+                document.cookie = `${name}=${value};${expires};10;path=/`
+            }
+
+            function getCookie(name) {
+                name += '='
+                var cookie = document.cookie.split(';')
+
+                for(var i = 0; i < cookie.length; i++) {
+                    var c = cookie[i]
+
+                    while (c.charAt(0) == ' ')
+                        c = c.substring(1)
+                    
+                    if (c.indexOf(name) == 0)
+                        return c.substring(name.length, c.length)
+                }
+
+                return ''
+            }
+            
+            const themeBlock = document.querySelector('.theme-block')
+            var theme = getCookie('theme')
+
+            if (theme == 'dark' || !theme) {
+                document.body.className = 'dark'
+                themeBlock.innerHTML = '<i class="far fa-moon"></i>'
+                setCookie('theme', 'dark')
+            }
+        </script>
     </body>
 </html>
 
@@ -165,6 +204,7 @@
     if (isset($_POST['email'])) {
         $username = $_POST['username'];
         $email = $_POST['email'];
+        $phone = $_POST['phone'];
         $password = $_POST['password'];
         $modeIndex = (int) $_POST['modeIndex'];
     }
@@ -173,8 +213,9 @@
 <form class='error' action="/login.php" method="post" style='display: none;'>
     <input name='username' value="<?= $username ?>">
     <input name='email' value="<?= $email ?>">
+    <input name='phone' value="<?= $phone ?>">
     <input name='password' value="<?= $password ?>">
-    <input name='error' value='You are robot. Please, repeat your registration as a human.'>
+    <input name='error' value='Maybe, you are robot. Please, repeat your registration as a human.'>
 </form>
 
 <?php
@@ -241,6 +282,7 @@
                     <form class='error' action="/login.php" method="post" style='display: none;'>
                         <input name='username' value="<?= $username ?>">
                         <input name='email' value="<?= $email ?>">
+                        <input name='phone' value="<?= $phone ?>">
                         <input name='password' value="<?= $password ?>">
                         <input name='error' value='The same email address already exists'>
                     </form>
@@ -254,6 +296,7 @@
                     <form class='error' action="/login.php" method="post" style='display: none;'>
                         <input name='username' value="<?= $username ?>">
                         <input name='email' value="<?= $email ?>">
+                        <input name='phone' value="<?= $phone ?>">
                         <input name='password' value="<?= $password ?>">
                         <input name='error' value="The same email address doesn't exist">
                     </form>
@@ -285,6 +328,7 @@
 
                 else if ($modeIndex == 1) {
                     $users = $connection -> query ("SELECT * FROM `users` WHERE `email` = '$email' AND
+                                                                                `phone` = '$phone' AND
                                                                                 `password` = '$hashedPassword'");
 
                     if (!( $user = $users -> fetch_assoc() )) {
@@ -293,7 +337,7 @@
                     <script>
                         const form = document.querySelector('form.error')
                         const error = form.querySelector('input[name="error"]')
-                        error.value = "The same account password doestn't exist"
+                        error.value = "The same phone number or password doestn't exist"
 
                         const button = document.createElement('button')
                         form.appendChild(button)
@@ -307,8 +351,8 @@
                     }
                 }
 
-                $symbols = '1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM';
                 if ($modeIndex == 0) {
+                    $symbols = '1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM';
                     $user = true;
 
                     while ($user) {
@@ -351,7 +395,7 @@
                 $mail -> addAddress($email);
 
                 $mail -> Subject = 'Your Code';
-                $mail -> Body = "Your verification code is $code";
+                $mail -> Body = "Your verification code is $code.";
                 $mail -> send();
                 
                 $users = $connection -> query(
@@ -363,6 +407,7 @@
                         "UPDATE `temp-users` SET `id` = '$id',
                                                  `username` = '$username',
                                                  `password` = '$hashedPassword',
+                                                 `phone` = '$phone',
                                                  `code` = '$code',
                                                  `attempts` = '5'
                                                  WHERE email = '$email'"
@@ -371,8 +416,8 @@
             
                 else {
                     $connection -> query(
-                        "INSERT INTO `temp-users` (`id`, `username`, `email`, `password`, `code`, `attempts`) VALUES (
-                            '$id', '$username', '$email', '$hashedPassword', '$code', '5'
+                        "INSERT INTO `temp-users` (`id`, `username`, `email`, `password`, `phone`, `code`, `attempts`) VALUES (
+                            '$id', '$username', '$email', '$hashedPassword', '$phone', '$code', '5'
                         )"
                     );
                 }

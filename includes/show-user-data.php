@@ -6,6 +6,6 @@
         $user = $connection -> query("SELECT * FROM `users` WHERE `secret-id` = '$userId'")
                 -> fetch_assoc();
 
-        echo '["' . $user['username'] . '","' . $user['email'] . '"]';
+        echo '["' . $user['username'] . '","' . $user['email'] . '","' . $user['phone'] . '"]';
     }
 ?>

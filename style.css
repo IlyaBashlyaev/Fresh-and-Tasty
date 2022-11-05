@@ -15,6 +15,25 @@ body {
     overflow: hidden;
 }
 
+.theme-block {
+    cursor: pointer;
+    position: absolute;
+    top: 0; right: 0;
+    width: 50px;
+    height: 50px;
+    background-color: rgba(0, 0, 0, .7);
+    border-bottom-left-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+.theme-block > i {
+    font-size: 25px;
+    color: #fff;
+}
+
 .alert {
     transition: 1s;
     position: fixed;
@@ -39,6 +58,11 @@ body {
     color: #111;
 }
 
+body.dark .inner-alert {
+    background-color: #222;
+    border: 2vh solid #000;
+}
+
 .inner-alert:hover {
     transition: 1s;
     background-color: #888;
@@ -46,11 +70,20 @@ body {
     color: #222;
 }
 
+body.dark .inner-alert:hover {
+    background-color: #333;
+    border: 2vh solid #111;
+}
+
 .alert-text {
     transition: 1s;
     padding: 4vh 4vw 4vh 4vw;
     text-align: center;
     font-size: 50px;
+}
+
+body.dark .alert-text {
+    color: #fff;
 }
 
 .alert-button {
@@ -82,18 +115,27 @@ main {
 form {
     transition: 1s;
     width: 60vw;
-    height: 79vh;
+    height: 93vh;
     background-color: #777;
     border-radius: 10vh;
-    border: 2vh solid #333;
+    border: 1vh solid #333;
     opacity: .7;
     box-shadow: 0 0 80px #000;
 }
 
+body.dark form {
+    background-color: #222;
+    border: 1vh solid #000;
+}
+
 form:hover {
-    transition: 1s;
     background-color: #888;
-    border: 2vh solid #444;
+    border: 1vh solid #444;
+}
+
+body.dark form:hover {
+    background-color: #333;
+    border: 1vh solid #111;
 }
 
 .mode {
@@ -107,28 +149,40 @@ form:hover {
 }
 
 .sign {
+    cursor: pointer;
     transition: 1s;
     padding: 1vh 1vw 1vh 1vw;
     background-color: #bbb;
-    border: 0.5vh solid #999;
+    border: 4px solid #999;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #111;
+    color: #222;
     font-size: 30px;
 }
 
+body.dark .sign {
+    background-color: #333;
+    border: 4px solid #111;
+    color: #eee;
+}
+
 .sign:hover {
-    transition: 1s;
     background-color: #ccc;
-    border: 0.5vh solid #aaa;
-    color: #222;
+    border: 4px solid #aaa;
+    color: #333;
+}
+
+body.dark .sign:hover {
+    background-color: #444;
+    border: 4px solid #222;
+    color: #fff;
 }
 
 .sign.clicked {
-    background-color: #6fa6ff;
-    border: 0.5vh solid #2d88ff;
-    color: #113264;
+    background-color: #6fa6ff !important;
+    border: 4px solid #2d88ff !important;
+    color: #113264 !important;
     box-shadow: 0 0 10px #0080ff;
 }
 
@@ -160,12 +214,18 @@ form:hover {
     padding-right: 2vh;
     background-color: #aaa;
     border-radius: 2.5vh;
-    border: 1vh solid #171717;
+    border: 1vh solid #222;
     border-radius: 1vh;
     box-shadow: 0 0 40px rgba(0, 0, 0, .5);
     outline: none;
     font-size: 5vh;
     color: #000;
+}
+
+body.dark .inner-form-input {
+    background-color: #555;
+    border: 1vh solid #111;
+    color: #eee;
 }
 
 .inner-form-input.password {
@@ -205,15 +265,29 @@ form:hover {
     color: #555;
 }
 
+body.dark .inner-form-input::placeholder {
+    color: #aaa;
+}
+
 .inner-form-input.clicked {
     transition: 1s;
     background-color: #bbb;
     border: 1vh solid #272727;
 }
 
+body.dark .inner-form-input.clicked {
+    background-color: #666;
+    border: 1vh solid #222;
+    color: #fff;
+}
+
 .inner-form-input.clicked::placeholder {
     transition: 1s;
     color: #666;
+}
+
+body.dark .inner-form-input.clicked::placeholder {
+    color: #bbb;
 }
 
 .inner-form-input.wrong {
@@ -244,11 +318,12 @@ form:hover {
 
 .login button,
 .alert-button button {
+    cursor: pointer;
     transition: 1s;
     background-color: #28a028;
     outline: none;
-    border: .75vh solid #1e781e;
-    border-radius: 2vh;
+    border: 6px solid #1e781e;
+    border-radius: 16px;
     box-shadow: 0 0 20px #196419;
     cursor: pointer;
     font-size: 40px;

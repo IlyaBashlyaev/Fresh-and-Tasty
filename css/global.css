@@ -346,6 +346,7 @@ li {
 .header__user {
   position: relative;
   display: flex;
+  align-items: center;
 }
 
 .header__user > a {

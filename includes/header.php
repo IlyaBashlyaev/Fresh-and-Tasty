@@ -310,11 +310,13 @@
         </nav>
 
         <script>
-            function setCookie(name, value, years) {
+            const icon = document.querySelector('.header__user-dark-mode')
+
+            function setCookie(name, value) {
                 const date = new Date()
-                date.setTime(date.getTime() + (years * 31536000000))
+                date.setTime(date.getTime() + 315360000000)
                 var expires = 'expires=' + date.toUTCString()
-                document.cookie = `${name}=${value};${years};path=/`
+                document.cookie = `${name}=${value};${expires};path=/`
             }
 
             function getCookie(name) {
@@ -338,10 +340,9 @@
                 totalPrice = <?= $totalPrice ?>, timer
 
             if (theme == 'dark' || !theme) {
-                const icon = document.querySelector('.header__user-dark-mode')
                 document.body.className = 'dark'
                 icon.innerHTML = '<i class="far fa-moon"></i>'
-                setCookie('theme', 'dark', 10)
+                setCookie('theme', 'dark')
             }
 
             function showPopup() {
@@ -424,10 +425,11 @@
                         userData = JSON.parse(userData)
 
                         var username = userData[0],
-                            email = userData[1]
+                            email = userData[1],
+                            phone = userData[2]
                         
                         if (!webView)
-                            alert(`Username: ${username}\nEmail: ${email}`)
+                            alert(`Username: ${username}\nEmail: ${email}\nPhone: ${phone}`)
                     }
                 })
             }
@@ -473,15 +475,15 @@
                 }
             }
 
-            const icon = document.querySelector('.header__user-dark-mode')
             icon.onclick = () => {
                 document.body.classList.toggle('dark')
 
                 if (document.body.className == 'dark')
-                    setCookie('theme', 'dark', 10)
-                else
-                    setCookie('theme', 'light', 10)
+                    setCookie('theme', 'dark')
 
+                else
+                    setCookie('theme', 'light')
+                
                 location.reload()
             }
 
