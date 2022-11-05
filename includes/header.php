@@ -16,7 +16,7 @@
                                 <a>Chat with us</a>
                             </li>
 
-                            <li class="header__contacts-item tel"><a href="tel:+3801234567890">+380 123 456 78 90</a></li>
+                            <li class="header__contacts-item tel"><a href="tel:+491234567890">+49 123 456 78 90</a></li>
                             <li class="header__contacts-item email"><a href="mail:info@fresh-and-tasty.com">info@fresh-and-tasty.com</a></li>
                         </ul>
 

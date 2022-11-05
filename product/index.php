@@ -127,12 +127,12 @@
                                                 if ($product['prev-price'])
                                                     echo 'style="line-height: 27px;"';
                                             ?>>
-                                                <?= $product['price'] ?> ₴
+                                                <?= $product['price'] ?> €
     
                                                 <?php
                                                     if ($product['prev-price']) {
                                                         ?>
-                                                        <div class="prev-cost"><?= $product['prev-price'] ?> ₴</div>
+                                                        <div class="prev-cost"><?= $product['prev-price'] ?> €</div>
                                                         <?php
                                                     }
                                                 ?>
@@ -304,10 +304,10 @@
 
                                                         <div class="products__item-buy">
                                                             <div class="cost" style="line-height: 27px;">
-                                                                <?= $product['price'] ?> ₴
+                                                                <?= $product['price'] ?> €
                                                                 <?php
                                                                     if ($product['prev-price'])
-                                                                        echo '<div class="prev-cost">' . $product['prev-price'] . ' ₴</div>';
+                                                                        echo '<div class="prev-cost">' . $product['prev-price'] . ' €</div>';
                                                                 ?>
                                                             </div>
 

@@ -446,13 +446,13 @@ Products that have been purchased by a customer:<br>";
 
                                             <div class="products__item-buy">
                                                 <div class="cost">
-                                                    <?= $product['price'] ?> ₴
+                                                    <?= $product['price'] ?> €
                                                     <div class="prev-cost"><?php
                                                         $hasDiscount = false;
 
                                                         if ($product['prev-price']) {
                                                             $hasDiscount = true;
-                                                            echo $product['prev-price'] . ' ₴';
+                                                            echo $product['prev-price'] . ' €';
                                                         }
                                                     ?></div>
                                                 </div>
@@ -512,8 +512,8 @@ Products that have been purchased by a customer:<br>";
 
                                         <div class="products__item-buy">
                                             <div class="cost" style="line-height: 27px;">
-                                                <?= $product['price'] ?> ₴
-                                                <div class="prev-cost"><?= $product['prev-price'] ?> ₴</div>
+                                                <?= $product['price'] ?> €
+                                                <div class="prev-cost"><?= $product['prev-price'] ?> €</div>
                                             </div>
 
                                             <div class="products__btn button" onclick="addToCart('<?= $product['product-id'] ?>')">Buy now</div>
