@@ -22,6 +22,9 @@
         crossorigin="anonymous" referrerpolicy="no-referrer">
         <script src="includes/slick.min.js" defer></script>
 
+        <script src="https://www.paypal.com/sdk/js?client-id=sb&disable-funding=credit,card&currency=EUR"></script>
+        <script class="paypal" src="includes/paypal.js" defer></script>
+
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Montserrat:wght@500;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" crossorigin="anonymous">
         
@@ -124,11 +127,59 @@
                             use PHPMailer\PHPMailer\Exception;
                             $key = '';
 
-                            if (isset($_POST['ik_co_id']) && isset($_POST['ik_inv_st'])) {
-                                if ($_POST['ik_co_id'] == '621fa5dd8640c862c864953a' && $_POST['ik_inv_st'] == 'success') {
-                                    $userId = $_POST['ik_pm_no'];
-                                    $user = $connection -> query("SELECT * FROM `users` WHERE `id` = '$userId'")
-                                            -> fetch_assoc();
+                            if (
+                                (isset($_POST['ik_co_id']) && isset($_POST['ik_inv_st'])) ||
+                                isset($_POST['payment_details'])
+                            ) {
+                                isset($_POST['ik_co_id']) ? $ik_co_id = $_POST['ik_co_id'] : $ik_co_id = '';
+                                isset($_POST['ik_inv_st']) ? $ik_inv_st = $_POST['ik_inv_st'] : $ik_inv_st = '';
+
+                                $paymentDetails = (array) json_decode($_POST['payment_details']);
+
+                                if (!$paymentDetails) {
+                                    $paymentDetails = array(
+                                        'intent' => '',
+                                        'status' => ''
+                                    );
+                                }
+
+                                if (isset($paymentDetails['purchase_units'])) {
+                                    $purchase_units = (array) $paymentDetails['purchase_units'][0];
+
+                                    if ($purchase_units['amount'])
+                                        $amount = (array) $purchase_units['amount'];
+                                    
+                                    else {
+                                        $amount = array(
+                                            'currency_code' => ''
+                                        );
+                                    }
+                                }
+
+                                else {
+                                    $amount = array(
+                                        'currency_code' => ''
+                                    );
+                                }
+
+                                if (
+                                    ($ik_co_id == '621fa5dd8640c862c864953a' && $ik_inv_st == 'success') ||
+                                    (
+                                        isset($paymentDetails['id']) && $paymentDetails['intent'] == 'CAPTURE' && $paymentDetails['status'] == 'COMPLETED' &&
+                                        $amount['currency_code'] == 'EUR'
+                                    )
+                                ) {
+                                    if (isset($_POST['ik_pm_no'])) {
+                                        $userId = $_POST['ik_pm_no'];
+                                        $user = $connection -> query("SELECT * FROM `users` WHERE `id` = '$userId'")
+                                                -> fetch_assoc();
+                                    }
+
+                                    else if (isset($_COOKIE['user-id'])) {
+                                        $secretId = $_COOKIE['user-id'];
+                                        $user = $connection -> query("SELECT * FROM `users` WHERE `secret-id` = '$secretId'")
+                                                -> fetch_assoc();
+                                    }
 
                                     if ($user) {
                                         $username = $user['username'];
@@ -139,7 +190,7 @@
                                     else {
                                         $username = 'Unknown';
                                         $email = 'Unknown';
-                                        $phone = $userCart['phone'];
+                                        $phone = 'Unknown';
                                     }
 
                                     $senderUsername = 'ibashlyaev2000@gmail.com';
@@ -188,6 +239,26 @@ Products that have been purchased by a customer:<br>";
                                         $body .= ').<br>';
                                     }
 
+                                    if (isset($purchase_units['shipping'])) {
+                                        $shipping = (array) $purchase_units['shipping'];
+
+                                        if (isset($shipping['address']))
+                                            $address = (array) $shipping['address'];
+                                        else
+                                            $address = '';
+                                    }
+
+                                    else
+                                        $address = '';
+
+                                    if ($address) {
+                                        $body .= "<br>The data of user for the shipping:<br>
+- Addres: <b>" . $address['address_line_1'] . "</b><br>
+- City: <b>" . $address['admin_area_2'] . "</b><br>
+- Postal Code: <b>" . $address['postal_code'] . "</b><br>
+- Country Code: <b>" . $address['country_code'] . "</b>";
+                                    }
+
                                     $mail -> Subject = 'New order';
                                     $mail -> Body = $body;
                                     $mail -> send();
@@ -202,6 +273,9 @@ Products that have been purchased by a customer:<br>";
 
                                     <?php
                                 }
+
+                                else
+                                    echo "<script>alert('Your payment was uncorrect. Please, try it again.')</script>";
                             }
 
                             if (isset($_GET['key'])) {
@@ -729,14 +803,12 @@ Products that have been purchased by a customer:<br>";
 
                     if (mainClientRect.top <= 0 && mainBottom >= 0) {
                         if (window.scrollY > lastScrollY) {
-                            console.log([settingsBottom, settings.clientHeight, window.innerHeight])
                             if (settingsBottom < 0 && settings.clientHeight < window.innerHeight) {
                                 settings.style.marginTop = -mainClientRect.top - (settings.clientHeight - window.innerHeight) + 'px'
                             }
                         }
 
                         else {
-                            console.log([settingsClientRect.top, settings.clientHeight, window.innerHeight])
                             if (settingsClientRect.top > 0 && settings.clientHeight < window.innerHeight) {
                                 settings.style.marginTop = -mainClientRect.top + 'px'
                             }
@@ -813,7 +885,7 @@ Products that have been purchased by a customer:<br>";
                             if (!webView)
                                 alert('The product was successfully added to the cart.')
                             
-                            location.reload()
+                                window.location.href = '/'
                         }
                     })
                 }
@@ -830,21 +902,21 @@ Products that have been purchased by a customer:<br>";
                     responsive: [
                         {
                             breakpoint: 1100,
-                            settings:{
+                            settings: {
                                 slidesToShow: 3,
                                 slidesToScroll: 1,
                             }
                         },
                         {
                             breakpoint: 800,
-                            settings:{
+                            settings: {
                                 slidesToShow: 2,
                                 slidesToScroll: 1,
                             }
                         },
                         {
                             breakpoint: 500,
-                            settings:{
+                            settings: {
                                 slidesToShow: 1,
                                 slidesToScroll: 1,
                             }

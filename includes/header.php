@@ -170,12 +170,12 @@
 
                                                                 <div class="popup__content">
                                                                     <div class="popup__product-title"><?= $product['title'] ?></div>
-                                                                    <div class="popup__product-price"><?= (int) $product['price'] * $repeatedId ?> ₴</div>
+                                                                    <div class="popup__product-price"><?= (int) $product['price'] * $repeatedId ?> €</div>
 
                                                                     <?php
                                                                         if (isset($product['prev-price'])) {
                                                                             ?>
-                                                                            <div class="popup__product-prev-price"><?= (int) $product['prev-price'] * $repeatedId ?> ₴</div>
+                                                                            <div class="popup__product-prev-price"><?= (int) $product['prev-price'] * $repeatedId ?> €</div>
                                                                             <?php
                                                                         }
                                                                     ?>
@@ -190,10 +190,14 @@
                                                 <div class="popup__price-block">
                                                     <div class="popup__total-price">
                                                         <div class="popup__price-title">Total price:</div>
-                                                        <div class="popup__price"><?= $totalPrice ?> ₴</div>
+                                                        <div class="popup__price"><?= $totalPrice ?> €</div>
                                                     </div>
 
-                                                    <div class="button" onclick="pay()">Go to checkout</div>
+                                                    <div class="pay">
+                                                        <div class="button" onclick="pay()">Go to checkout</div>
+                                                        <a>Or</a>
+                                                        <div class="paypal-payment-button"></div>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -364,7 +368,7 @@
                               quantity = document.querySelector('.quantity')
                         
                         popupProduct.remove()
-                        popupTotalPrice.innerText = parseInt(popupTotalPrice.innerText) - parseInt(priceBlock[0]) + ' ₴'
+                        popupTotalPrice.innerText = parseInt(popupTotalPrice.innerText) - parseInt(priceBlock[0]) + ' €'
                     
                         if (priceBlock[1] != '0')
                             quantity.innerText = priceBlock[1]
@@ -390,10 +394,12 @@
                 $.ajax({
                     url: '/includes/change-quantity.php',
                     type: 'post',
+                    
                     data: {
                         productId: productId,
                         quantity: quantity
                     },
+
                     success: priceBlock => {
                         priceBlock = priceBlock.split(' ')
 
@@ -401,17 +407,27 @@
                               popupPrice = popupProduct.querySelector('.popup__product-price'),
                               popupPrevPrice = popupProduct.querySelector('.popup__product-prev-price'),
                               popupTotalPrice = document.querySelector('.popup__price'),
-                              quantity = document.querySelector('.quantity')
+                              quantity = document.querySelector('.quantity'),
+                              paypalPaymentButton = document.querySelector('.paypal-payment-button')
                         
                         totalPrice -= popupPrice.innerText
-                        popupPrice.innerText = priceBlock[0] + ' ₴'
+                        popupPrice.innerText = priceBlock[0] + ' €'
                         totalPrice += priceBlock[0]
                         totalPrice = totalPrice.split('NaN')[1]
                         quantity.innerText = priceBlock[1]
 
                         if (popupPrevPrice)
                             popupPrevPrice.innerText = priceBlock[2]
-                        popupTotalPrice.innerText = totalPrice + ' ₴'
+                        popupTotalPrice.innerText = totalPrice + ' €'
+
+                        document.querySelector('script.paypal').remove()
+                        paypalPaymentButton.innerHTML = ''
+
+                        var paypal = document.createElement('script')
+                        paypal.className = 'paypal'
+                        paypal.type = 'text/javascript'
+                        paypal.src = 'includes/paypal.js'
+                        document.head.appendChild(paypal)
                     }
                 })
             }

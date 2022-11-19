@@ -61,13 +61,22 @@
 
                 $productsId = implode(' ', $productsId);
                 setcookie('products-id', $productsId, time() + 315360000);
+
+                $string = file_get_contents('https://www.google.com/search?q=1+euro+in+hryvnia');
+                libxml_use_internal_errors(true);
+                $html = new DOMDocument();
+                $html -> loadHTML($string);
+                $html = new DOMXPath($html);
+
+                $UAH = $html -> query('//div[@class="BNeawe iBp4i AP7Wnd"]') -> item(0) -> nodeValue;
+                $UAH = (double) explode(' ', $UAH)[0] * $totalPrice;
                 ?>
 
                 <script>
                     $.redirect('https://sci.interkassa.com', {
                         ik_co_id: '621fa5dd8640c862c864953a',
                         ik_pm_no: '<?= $userId ?>',
-                        ik_am: '<?= $totalPrice ?>',
+                        ik_am: '<?= $UAH ?>',
                         ik_cur: 'UAH',
                         ik_desc: 'Selling of products'
                     }, 'POST')

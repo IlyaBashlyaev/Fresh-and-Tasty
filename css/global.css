@@ -540,13 +540,6 @@ li {
   justify-content: space-between;
 }
 
-.popup__total-price {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  gap: 4px;
-}
-
 .popup__price-title {
   font-family: Montserrat, sans-serif;
   font-weight: 600;
@@ -555,10 +548,23 @@ li {
 }
 
 .popup__price {
+  margin-top: 6px;
   font-family: Montserrat, sans-serif;
   font-weight: 600;
   font-size: 22px;
   color: #151515;
+}
+
+.pay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pay > a {
+  margin: 6px 0;
+  color: #fff;
+  font-size: 16px;
 }
 
 .tel {
