@@ -33,6 +33,6 @@ paypal.Buttons({
 
     onCancel: data => {
         if (!webView)
-            alert('The payment was interrupted.')
+            alert('The payment was unfortunately interrupted.')
     }
 }).render('.paypal-payment-button')

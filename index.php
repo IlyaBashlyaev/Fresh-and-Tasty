@@ -20,14 +20,16 @@
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/4.1.5/css/flag-icons.min.css" integrity="sha512-UwbBNAFoECXUPeDhlKR3zzWU3j8ddKIQQsDOsKhXQGdiB5i3IHEXr9kXx82+gaHigbNKbTDp3VY/G6gZqva6ZQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer">
-        <script src="includes/slick.min.js" defer></script>
 
         <script src="https://www.paypal.com/sdk/js?client-id=sb&disable-funding=credit,card&currency=EUR"></script>
         <script class="paypal" src="includes/paypal.js" defer></script>
 
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Montserrat:wght@500;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" crossorigin="anonymous">
-        
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
+
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/global.css">
         <title>Fresh and Tasty</title>
@@ -188,13 +190,14 @@
                                     }
 
                                     else {
+                                        $userId = '';
                                         $username = 'Unknown';
                                         $email = 'Unknown';
                                         $phone = 'Unknown';
                                     }
 
                                     $senderUsername = 'ibashlyaev2000@gmail.com';
-                                    $senderPassword = 'peobsasdgavqtucn';
+                                    $senderPassword = 'pazbrinzydyhztqv';
 
                                     $mail = new PHPMailer();
                                     $mail -> isSMTP();

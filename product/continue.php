@@ -17,7 +17,6 @@
 
         <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" crossorigin="anonymous">
 
         <link rel="shortcut icon" href="images/icon.png">
         <link rel="stylesheet" href="style.css">
@@ -33,10 +32,6 @@
                     <button onclick='removeAlert()'>Ok</button>
                 </div>
             </div>
-        </div>
-
-        <div class="theme-block">
-            <i class="far fa-sun"></i>
         </div>
 
         <div class="bg" style="background-image: url(http://unsplash.it/1920/1080?gravity=center); width: 125vw; height: 125vh;"></div>
@@ -179,20 +174,6 @@
             formInput.classList.remove('wrong')
         }
     }
-
-    themeBlock.onclick = () => {
-        document.body.classList.toggle('dark')
-
-        if (document.body.className == 'dark') {
-            themeBlock.innerHTML = '<i class="far fa-moon"></i>'
-            setCookie('theme', 'dark')
-        }
-
-        else {
-            themeBlock.innerHTML = '<i class="far fa-sun"></i>'
-            setCookie('theme', 'light')
-        }
-    }
 </script>
 
 <?php
@@ -258,7 +239,7 @@
 
                     <script>
                         const form = document.querySelector('form.error')
-                        var button = document.createElement('button')
+                        const button = document.createElement('button')
                         form.appendChild(button)
 
                         button.type = 'submit'
@@ -275,7 +256,7 @@
 
                 <script>
                     const form = document.querySelector('form.error')
-                    var button = document.createElement('button')
+                    const button = document.createElement('button')
                     form.appendChild(button)
 
                     button.type = 'submit'
@@ -334,7 +315,7 @@
 
                     <script>
                         const form = document.querySelectorAll('form.error')[1]
-                        var button = document.querySelectorAll('button')[1]
+                        const button = document.querySelectorAll('button')[1]
                         form.appendChild(button)
 
                         button.type = 'submit'
@@ -358,7 +339,7 @@
                         const error = form.querySelector('input[name="error"]')
                         error.value = "The same phone number or password doestn't exist"
 
-                        var button = document.createElement('button')
+                        const button = document.createElement('button')
                         form.appendChild(button)
 
                         button.type = 'submit'
@@ -397,7 +378,7 @@
 
                 $code = rand(1000, 9999);
                 $senderUsername = 'ibashlyaev2000@gmail.com';
-                $senderPassword = 'pazbrinzydyhztqv';
+                $senderPassword = 'peobsasdgavqtucn';
 
                 $mail = new PHPMailer();
                 $mail -> isSMTP();
