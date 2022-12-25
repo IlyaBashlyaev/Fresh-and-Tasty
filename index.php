@@ -1,5 +1,6 @@
 <?php
     require 'db.php';
+    ini_set('display_errors', 0);
 
     if (isset($_COOKIE['products-id'])) {
         $productsId = explode(' ', $_COOKIE['products-id']);
@@ -21,9 +22,6 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/4.1.5/css/flag-icons.min.css" integrity="sha512-UwbBNAFoECXUPeDhlKR3zzWU3j8ddKIQQsDOsKhXQGdiB5i3IHEXr9kXx82+gaHigbNKbTDp3VY/G6gZqva6ZQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer">
 
-        <script src="https://www.paypal.com/sdk/js?client-id=sb&disable-funding=credit,card&currency=EUR"></script>
-        <script class="paypal" src="includes/paypal.js" defer></script>
-
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Montserrat:wght@500;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" crossorigin="anonymous">
 
@@ -32,6 +30,8 @@
 
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/global.css">
+
+        <script class="paypal" src="includes/paypal.js" defer></script>
         <title>Fresh and Tasty</title>
     </head>
 
@@ -171,58 +171,6 @@
                                         $amount['currency_code'] == 'EUR'
                                     )
                                 ) {
-                                    if (isset($_POST['ik_pm_no'])) {
-                                        $userId = $_POST['ik_pm_no'];
-                                        $user = $connection -> query("SELECT * FROM `users` WHERE `id` = '$userId'")
-                                                -> fetch_assoc();
-                                    }
-
-                                    else if (isset($_COOKIE['user-id'])) {
-                                        $secretId = $_COOKIE['user-id'];
-                                        $user = $connection -> query("SELECT * FROM `users` WHERE `secret-id` = '$secretId'")
-                                                -> fetch_assoc();
-                                    }
-
-                                    if ($user) {
-                                        $username = $user['username'];
-                                        $email = $user['email'];
-                                        $phone = $user['phone'];
-                                    }
-
-                                    else {
-                                        $userId = '';
-                                        $username = 'Unknown';
-                                        $email = 'Unknown';
-                                        $phone = 'Unknown';
-                                    }
-
-                                    $senderUsername = 'ibashlyaev2000@gmail.com';
-                                    $senderPassword = 'pazbrinzydyhztqv';
-
-                                    $mail = new PHPMailer();
-                                    $mail -> isSMTP();
-                                    $mail -> Host = 'smtp.gmail.com';
-                                    $mail -> SMTPAuth = true;
-
-                                    $mail -> Username = $senderUsername;
-                                    $mail -> Password = $senderPassword;
-
-                                    $mail -> SMTPSecure = 'tls';
-                                    $mail -> Port = 587;
-
-                                    $mail -> setFrom($senderUsername, 'Ilya Bashlyaev');
-                                    $mail -> addAddress($senderUsername);
-                                    $mail -> isHTML();
-
-                                    $body = "<i>Hi! Products have just been purchased from our website by a customer.</i><br><br>
-
-Customer contact details:<br>
-- Username: <b>$username</b>.<br>
-- Email: <b>$email</b>.<br>
-- Phone: <b>$phone</b>.<br><br>
-
-Products that have been purchased by a customer:<br>";
-
                                     $repeatedIds = array();
                                     foreach ($productsId as $productId) {
                                         if (isset($repeatedIds[$productId]))
@@ -231,50 +179,105 @@ Products that have been purchased by a customer:<br>";
                                             $repeatedIds[$productId] = 1;
                                     }
 
-                                    foreach ($repeatedIds as $id => $repeatedId) {
-                                        $product = $connection -> query("SELECT * FROM `products` WHERE `product-id` = '$id'")
+                                    if ($repeatedIds) {
+                                        if (isset($_POST['ik_pm_no'])) {
+                                            $userId = $_POST['ik_pm_no'];
+                                            $user = $connection -> query("SELECT * FROM `users` WHERE `id` = '$userId'")
                                                     -> fetch_assoc();
-                                        $title = $product['title'];
+                                        }
 
-                                        $body .= "    - \"$title\" ($repeatedId product";
-                                        if ($repeatedId > 1)
-                                            $body .= 's';
-                                        $body .= ').<br>';
-                                    }
+                                        else if (isset($_COOKIE['user-id'])) {
+                                            $secretId = $_COOKIE['user-id'];
+                                            $user = $connection -> query("SELECT * FROM `users` WHERE `secret-id` = '$secretId'")
+                                                    -> fetch_assoc();
+                                        }
 
-                                    if (isset($purchase_units['shipping'])) {
-                                        $shipping = (array) $purchase_units['shipping'];
+                                        if ($user) {
+                                            $username = $user['username'];
+                                            $email = $user['email'];
+                                            $phone = $user['phone'];
+                                        }
 
-                                        if (isset($shipping['address']))
-                                            $address = (array) $shipping['address'];
+                                        else {
+                                            $userId = '';
+                                            $username = 'Unknown';
+                                            $email = 'Unknown';
+                                            $phone = 'Unknown';
+                                        }
+
+                                        $senderUsername = 'ibashlyaev2000@gmail.com';
+                                        $senderPassword = 'pazbrinzydyhztqv';
+
+                                        $mail = new PHPMailer();
+                                        $mail -> isSMTP();
+                                        $mail -> Host = 'smtp.gmail.com';
+                                        $mail -> SMTPAuth = true;
+
+                                        $mail -> Username = $senderUsername;
+                                        $mail -> Password = $senderPassword;
+
+                                        $mail -> SMTPSecure = 'tls';
+                                        $mail -> Port = 587;
+
+                                        $mail -> setFrom($senderUsername, 'Ilya Bashlyaev');
+                                        $mail -> addAddress($senderUsername);
+                                        if ($email) $mail -> addAddress($email);
+                                        $mail -> isHTML();
+
+                                        $body = "<i>Hi! Products have just been purchased from our website by a customer.</i><br><br>
+
+Customer contact details:<br>
+- Username: <b>$username</b>.<br>
+- Email: <b>$email</b>.<br>
+- Phone: <b>$phone</b>.<br><br>
+
+Products that have been purchased by a customer:<br>";
+
+                                        foreach ($repeatedIds as $id => $repeatedId) {
+                                            $product = $connection -> query("SELECT * FROM `products` WHERE `product-id` = '$id'")
+                                                        -> fetch_assoc();
+                                            $title = $product['title'];
+
+                                            $body .= "    - \"$title\" ($repeatedId product";
+                                            if ($repeatedId > 1)
+                                                $body .= 's';
+                                            $body .= ').<br>';
+                                        }
+
+                                        if (isset($purchase_units['shipping'])) {
+                                            $shipping = (array) $purchase_units['shipping'];
+
+                                            if (isset($shipping['address']))
+                                                $address = (array) $shipping['address'];
+                                            else
+                                                $address = '';
+                                        }
+
                                         else
                                             $address = '';
-                                    }
 
-                                    else
-                                        $address = '';
-
-                                    if ($address) {
-                                        $body .= "<br>The data of user for the shipping:<br>
+                                        if ($address) {
+                                            $body .= "<br>The data of user for the shipping:<br>
 - Addres: <b>" . $address['address_line_1'] . "</b><br>
 - City: <b>" . $address['admin_area_2'] . "</b><br>
 - Postal Code: <b>" . $address['postal_code'] . "</b><br>
 - Country Code: <b>" . $address['country_code'] . "</b>";
+                                        }
+
+                                        $mail -> Subject = 'New order';
+                                        $mail -> Body = $body;
+                                        $mail -> send();
+
+                                        $connection -> query("DELETE FROM `user-carts` WHERE `user-id` = '$userId'");
+                                        ?>
+
+                                        <script>
+                                            if (!webView)
+                                                alert('Products have been successfully purchased. Wait for feedback from our worker.')
+                                        </script>
+
+                                        <?php
                                     }
-
-                                    $mail -> Subject = 'New order';
-                                    $mail -> Body = $body;
-                                    $mail -> send();
-
-                                    $connection -> query("DELETE FROM `user-carts` WHERE `user-id` = '$userId'");
-                                    ?>
-
-                                    <script>
-                                        if (!webView)
-                                            alert('Products have been successfully purchased. Wait for feedback from our worker.')
-                                    </script>
-
-                                    <?php
                                 }
 
                                 else
@@ -294,6 +297,10 @@ Products that have been purchased by a customer:<br>";
                                     $totalCount = $connection -> query(
                                         'SELECT COUNT(*) AS `total-count` FROM `products` WHERE `prev-price`'
                                     ) -> fetch_assoc()['total-count'];
+
+                                    $maxPrice = $connection -> query(
+                                        'SELECT max(`price`) FROM `products`' . $totalCountStr
+                                    ) -> fetch_assoc()['max(`price`)'];
 
                                     ?>
 
@@ -400,7 +407,7 @@ Products that have been purchased by a customer:<br>";
                                                 if ($page != 1) {
                                                     ?>
 
-                                                    <button onclick="setNewPage('<?= $page - 1 ?>')" class="button">
+                                                    <button onclick="setNewPage('<?= $page - 1 ?>')" class="button paginator-button">
                                                         <span>&laquo; Last Page</span>    
                                                     </button>
 
@@ -410,7 +417,7 @@ Products that have been purchased by a customer:<br>";
                                                 if ($page != $allPages) {
                                                     ?>
 
-                                                    <button onclick="setNewPage('<?= $page + 1 ?>')" class="button">
+                                                    <button onclick="setNewPage('<?= $page + 1 ?>')" class="button paginator-button">
                                                         <span>Next Page &raquo;</span>
                                                     </button>
                                                     
@@ -419,9 +426,9 @@ Products that have been purchased by a customer:<br>";
                                             ?>
                                         </div>
 
-                                        <button onclick="window.location.href = '/'" class="button" style="<?php
+                                        <button onclick="window.location.href = '/'" class="button paginator-button" style="<?php
                                             if ($page != 1 || $page != $allPages)
-                                                echo "margin-top: 25px;"
+                                                echo " margin-top: 25px;"
                                         ?>">
                                             <span>All Products</span>    
                                         </button>
@@ -615,7 +622,7 @@ Products that have been purchased by a customer:<br>";
 
         <script>
             var isProductsShowed = true,
-                timer, lastScrollY
+                timer, lastScrollY, scrollPoint
 
             if (theme == 'dark') {
                 const icon = document.querySelector('.header__user-dark-mode')
@@ -797,24 +804,22 @@ Products that have been purchased by a customer:<br>";
             function setSidebarPosition() {
                 if (window.innerWidth > 750) {
                     const mainContent = document.querySelector('.main-content'),
-                        settings = document.querySelector('.settings'),
-                        mainClientRect = mainContent.getBoundingClientRect(),
-                        settingsClientRect = settings.getBoundingClientRect()
+                          settings = document.querySelector('.settings'),
+                          mainClientRect = mainContent.getBoundingClientRect(),
+                          settingsClientRect = settings.getBoundingClientRect()
                     
                     var mainBottom = mainClientRect.top + mainContent.clientHeight - window.innerHeight,
                         settingsBottom = settingsClientRect.bottom - window.innerHeight
 
                     if (mainClientRect.top <= 0 && mainBottom >= 0) {
                         if (window.scrollY > lastScrollY) {
-                            if (settingsBottom < 0 && settings.clientHeight < window.innerHeight) {
-                                settings.style.marginTop = -mainClientRect.top - (settings.clientHeight - window.innerHeight) + 'px'
-                            }
+                            if (settingsBottom < 0 && mainContent.clientHeight > window.innerHeight)
+                                settings.style.marginTop = -mainClientRect.top - (settings.clientHeight - window.innerHeight) - 4 + 'px'
                         }
 
                         else {
-                            if (settingsClientRect.top > 0 && settings.clientHeight < window.innerHeight) {
+                            if (settingsClientRect.top > 0 && mainContent.clientHeight > window.innerHeight)
                                 settings.style.marginTop = -mainClientRect.top + 'px'
-                            }
                         }
 
                         lastScrollY = window.scrollY

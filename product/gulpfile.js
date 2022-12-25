@@ -1,5 +1,5 @@
 var gulp = require('gulp'),
-    sass = require('gulp-sass')
+    sass = require('gulp-sass')(require('sass'))
 
 gulp.task('sass', () => {
     return gulp.src(['sass/**/*.sass', 'sass/**/*.scss'])
