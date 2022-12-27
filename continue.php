@@ -108,6 +108,12 @@
                 themeBlock.innerHTML = '<i class="far fa-moon"></i>'
                 setCookie('theme', 'dark')
             }
+
+            function removeWaterMark() {
+                const waterMark = document.querySelector('a[title]')
+                waterMark ? waterMark.remove() : requestAnimationFrame(removeWaterMark)
+            }
+            removeWaterMark()
         </script>
     </body>
 </html>

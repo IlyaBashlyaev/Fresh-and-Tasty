@@ -96,6 +96,7 @@
         </main>
 
         <script src="https://www.google.com/recaptcha/api.js?render=6Ldq8ZwbAAAAAN98ra5XtDtLZoUrMg6TJmIHCHMm"></script>
+        
         <script>
             grecaptcha.ready(function() {
                 grecaptcha.execute('6Ldq8ZwbAAAAAN98ra5XtDtLZoUrMg6TJmIHCHMm', {action: 'submit'}).then(function(token) {
@@ -103,9 +104,7 @@
                     response.value = token
                 })
             })
-        </script>
 
-        <script>
             var isAlert = false
             var canBeClosed = true
 
@@ -133,6 +132,12 @@
                 themeBlock.innerHTML = '<i class="far fa-moon"></i>'
                 setCookie('theme', 'dark')
             }
+
+            function removeWaterMark() {
+                const waterMark = document.querySelector('a[title]')
+                waterMark ? waterMark.remove() : requestAnimationFrame(removeWaterMark)
+            }
+            removeWaterMark()
 
             function setCookie(name, value) {
                 const date = new Date()

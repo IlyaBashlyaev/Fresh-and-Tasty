@@ -167,6 +167,12 @@
                                     const navigationInfo = document.querySelector('.navigation__info')
                                     navigationInfo.remove()
 
+                                    function removeWaterMark() {
+                                        const waterMark = document.querySelector('a[title]')
+                                        waterMark ? waterMark.remove() : requestAnimationFrame(removeWaterMark)
+                                    }
+                                    removeWaterMark()
+
                                     function changeTheme(icon) {
                                         document.body.classList.toggle('dark')
 

@@ -630,6 +630,12 @@ Products that have been purchased by a customer:<br>";
                 icon.innerHTML = '<i class="far fa-moon"></i>'
             }
 
+            function removeWaterMark() {
+                const waterMark = document.querySelector('a[title]')
+                waterMark ? waterMark.remove() : requestAnimationFrame(removeWaterMark)
+            }
+            removeWaterMark()
+
             function replaceProducts() {
                 const settingsMenuItems = document.querySelectorAll('.settings-menu__item'),
                       products = document.querySelector('.products'),
