@@ -47,9 +47,6 @@
                                 $userId = '';
                         }
 
-                        else if (isset($_COOKIE['guest-id']))
-                            $userId = $_COOKIE['guest-id'];
-
                         else
                             $userId = '';
 
@@ -276,6 +273,9 @@
                                                 }
                                             })
                                         }
+
+                                        else
+                                            window.location.href = '/login.php'
                                     }
 
                                     const productImage = document.querySelector('.product-image')

@@ -205,8 +205,8 @@
                                             $phone = 'Unknown';
                                         }
 
-                                        $senderUsername = '';
-                                        $senderPassword = '';
+                                        $senderUsername = 'ibashlyaev2000@gmail.com';
+                                        $senderPassword = 'lonfhihknivtxdro';
 
                                         $mail = new PHPMailer();
                                         $mail -> isSMTP();
@@ -622,7 +622,7 @@ Products that have been purchased by a customer:<br>";
 
         <script>
             var isProductsShowed = true,
-                timer, lastScrollY, scrollPoint
+                timerRP, lastScrollY, scrollPoint
 
             if (theme == 'dark') {
                 const icon = document.querySelector('.header__user-dark-mode')
@@ -680,9 +680,9 @@ Products that have been purchased by a customer:<br>";
             }
 
             function preReplaceProducts() {
-                if (timer)
-                    clearTimeout(timer)
-                timer = setTimeout(replaceProducts, 500)
+                if (timerRP)
+                    clearTimeout(timerRP)
+                timerRP = setTimeout(replaceProducts, 500)
             }
 
             function priceCheck() {
@@ -838,7 +838,7 @@ Products that have been purchased by a customer:<br>";
                     priceRange = element.parentNode
                     price = priceRange.parentNode
 
-                    priceRangeX = priceRange.getBoundingClientRect()['x']
+                    priceRangeX = priceRange.BoundingClientRect()['x']
                     priceRangeWidth = event.x - priceRangeX
 
                     if (priceRangeWidth < 10)
@@ -903,6 +903,9 @@ Products that have been purchased by a customer:<br>";
                         }
                     })
                 }
+
+                else
+                    window.location.href = '/login.php'
             }
 
             document.addEventListener('scroll', setSidebarPosition)

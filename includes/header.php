@@ -65,54 +65,11 @@
                             $user = $connection -> query("SELECT * FROM `users` WHERE `secret-id` = '$userId'")
                                     -> fetch_assoc();
                             $userId = $user['id'];
-
-                            if (!$user['phone']) {
-                                ?>
-                                <script>
-                                    var getPhone = true
-                                </script>
-                                <?php
-                            }
-
-                            else {
-                                ?>
-                                <script>
-                                    var getPhone = false
-                                </script>
-                                <?php
-                            }
                         }
 
                         else if (isset($_COOKIE['guest-id'])) {
-                            $userId = $_COOKIE['guest-id'];
                             $user = $connection -> query("SELECT * FROM `user-carts` WHERE `user-id` = '$userId'")
                                     -> fetch_assoc();
-
-                            if ($user) {
-                                if (!$user['phone']) {
-                                    ?>
-                                    <script>
-                                        var getPhone = true
-                                    </script>
-                                    <?php
-                                }
-
-                                else {
-                                    ?>
-                                    <script>
-                                        var getPhone = false
-                                    </script>
-                                    <?php
-                                }
-                            }
-
-                            else {
-                                ?>
-                                <script>
-                                    var getPhone = false
-                                </script>
-                                <?php
-                            }
                         }
                         
                         if (isset($_COOKIE['id']) || isset($_COOKIE['guest-id'])) {
@@ -154,7 +111,7 @@
                                                     ?>
 
                                                     <div class="popup__product" id="<?= $id ?>">
-                                                        <input type="number" class="popup__quantity" oninput="changeQuantity(this, '<?= $id ?>')" value="<?= $repeatedId ?>">
+                                                        <input type="number" class="popup__quantity" oninput="preChangeQuantity(this, '<?= $id ?>')" value="<?= $repeatedId ?>">
 
                                                         <div class="popup__sidebar">
                                                             <img class="popup__image" src="/<?= $product['image'] ?>">
@@ -191,7 +148,7 @@
                                             </div>
 
                                             <div class="pay">
-                                                <div class="button" onclick="pay()">Go to checkout</div>
+                                                <div class="button" onclick="window.location.href = '/pay.php'">Go to checkout</div>
                                                 <a>Or</a>
                                                 <div class="paypal-payment-button"></div>
                                             </div>
@@ -338,7 +295,7 @@
     }
 
     var theme = getCookie('theme'),
-        totalPrice = <?= $totalPrice ?>, timer
+        totalPrice = <?= $totalPrice ?>, timerCQ
 
     if (theme == 'dark' || !theme) {
         document.body.className = 'dark'
@@ -378,9 +335,9 @@
     function changeQuantity(input, productId) {
         var quantity = input.value
 
-        if (quantity > 18000) {
-            quantity = 18000
-            input.value = 18000
+        if (quantity > 10) {
+            quantity = 10
+            input.value = 10
         }
 
         else if (quantity < 1) {
@@ -401,12 +358,14 @@
                 priceBlock = priceBlock.split(' ')
 
                 const popupProduct = document.querySelector('.popup__product#' + productId),
-                        popupPrice = popupProduct.querySelector('.popup__product-price'),
-                        popupPrevPrice = popupProduct.querySelector('.popup__product-prev-price'),
-                        popupTotalPrice = document.querySelector('.popup__price'),
-                        quantity = document.querySelector('.quantity'),
-                        paypalPaymentButton = document.querySelector('.paypal-payment-button')
+                      popupQuantity = document.querySelector('.popup__quantity'),
+                      popupPrice = popupProduct.querySelector('.popup__product-price'),
+                      popupPrevPrice = popupProduct.querySelector('.popup__product-prev-price'),
+                      popupTotalPrice = document.querySelector('.popup__price'),
+                      quantity = document.querySelector('.quantity'),
+                      paypalPaymentButton = document.querySelector('.paypal-payment-button')
                 
+                popupQuantity.removeAttribute('readonly')
                 totalPrice -= popupPrice.innerText
                 popupPrice.innerText = priceBlock[0] + ' €'
                 totalPrice += priceBlock[0]
@@ -429,6 +388,12 @@
         })
     }
 
+    function preChangeQuantity(input, productId) {
+        timerCQ = setTimeout(changeQuantity(input, productId), 500)
+        const popupQuantity = document.querySelector('.popup__quantity')
+        popupQuantity.setAttribute('readonly', '')
+    }
+
     function showUserData() {
         $.ajax({
             url: '/includes/show-user-data.php',
@@ -447,17 +412,9 @@
         })
     }
 
-    function pay() {
-        if (getPhone) {
-            var phone = ''
-            while (!phone) {
-                phone = prompt("Enter the phone number that will be needed to inform you of important news about the creation of the product: ")
-            }
-            $.redirect('/pay.php', {phone: phone}, 'POST')
-        }
-
-        else
-            location.href = '/pay.php'
+    function validatePhone(phone) {
+        var re = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/
+        return re.test(phone)
     }
 
     function showSidebar() {
