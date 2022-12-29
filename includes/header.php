@@ -31,11 +31,7 @@
 
         <div class="header__bottom">
             <div class="header__wrap">
-                <a href="/" class="logo">
-                    <span class="flag-icon flag-icon-ua" style="background-image: url(https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/4.1.5/flags/4x3/ua.svg) !important"></span>
-                    Слава Україні!
-                    <span class="flag-icon flag-icon-ua" style="background-image: url(https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/4.1.5/flags/4x3/ua.svg) !important"></span>
-                </a>
+                <a href="/" class="logo">Fresh and Tasty</a>
 
                 <div class="header__search">
                     <div class="header__search-categories">
