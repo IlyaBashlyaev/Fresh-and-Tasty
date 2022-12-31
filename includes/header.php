@@ -355,6 +355,7 @@
             },
 
             success: priceBlock => {
+                console.log(priceBlock)
                 priceBlock = priceBlock.split(' ')
 
                 const popupProduct = document.querySelector('.popup__product#' + productId),
@@ -368,9 +369,8 @@
                 popupQuantity.removeAttribute('readonly')
                 totalPrice -= popupPrice.innerText
                 popupPrice.innerText = priceBlock[0] + ' €'
-                totalPrice += priceBlock[0]
-                totalPrice = totalPrice.split('NaN')[1]
-                quantity.innerText = priceBlock[1]
+                totalPrice = priceBlock[1]
+                quantity.innerText = priceBlock[2]
 
                 if (popupPrevPrice)
                     popupPrevPrice.innerText = priceBlock[2]

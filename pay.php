@@ -75,7 +75,14 @@
     <body>
         <script>
             $.redirect('https://sci.interkassa.com', {
-                ik_co_id: '621fa5dd8640c862c864953a',
+                ik_co_id: '<?php
+                    if ($_SERVER['HTTP_HOST'] == 'freshandtasty.hopto.org')
+                        echo '621fa5dd8640c862c864953a';
+                    else if ($_SERVER['HTTP_HOST'] == 'fresh-and-tasty.000webhostapp.com')
+                        echo '63aedad19efaaa44c5c1b6e0';
+                    else if ($_SERVER['HTTP_HOST'] == 'fresh-and-tasty-2.000webhostapp.com')
+                        echo '63aedc99ed4e0b2228e76b0f';
+                ?>',
                 ik_pm_no: '<?= $userId ?>',
                 ik_am: '<?= $UAH ?>',
                 ik_cur: 'UAH',
