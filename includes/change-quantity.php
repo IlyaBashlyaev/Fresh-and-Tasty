@@ -55,22 +55,6 @@
             $newProductsId = json_encode($newProductsId);
             $connection -> query("UPDATE `user-carts` SET `products-id` = '$newProductsId' WHERE `user-id` = '$userId'");
 
-            // $i = 0;
-            // for ($i = 0; $i < count($productsId); $i++) {
-            //     if ($productsId[$i] == $productId)
-            //         $productsId[$i] = '';
-            // }
-
-            // $length = count($productsId);
-            // for ($i = $length; $i < $length + $quantity; $i++) {
-            //     $productsId[$i] = $productId;
-            // }
-
-            // foreach ($productsId as $productId) {
-            //     if ($productId)
-            //         $newProductsId[] = $productId;
-            // }
-
             $productPrice = (int) $product['price'] * $quantity;
             echo $productPrice;
 

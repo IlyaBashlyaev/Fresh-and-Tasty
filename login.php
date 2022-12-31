@@ -11,7 +11,7 @@
 
         <link rel="shortcut icon" href="images/icon.png">
         <link rel="stylesheet" href="style.css">
-        <title>Shop - Registration</title>
+        <title>Fresh and Tasty - Registration</title>
     </head>
 
     <body onmouseup="rippleHide()">
