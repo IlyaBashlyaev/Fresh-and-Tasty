@@ -1,9 +1,11 @@
 <?php
     if (isset($_POST['productId'])) {
         require '../db.php';
+        ini_set('display_errors', 1);
         
         $postProductId = $_POST['productId'];
-        $quantity = $_POST['quantity'];
+        $quantity = (int) $_POST ['quantity'];
+        $lastQuantity = (int) $_POST ['lastQuantity'];
 
         if (isset($_COOKIE['id'])) {
             $userId = $_COOKIE['id'];
@@ -15,33 +17,40 @@
             $userId = $_COOKIE['guest-id'];
 
         if (isset($_COOKIE['id']) || isset($_COOKIE['guest-id'])) {
-            $userCart = $connection -> query("SELECT * FROM `user-carts` WHERE `user-id` = '$userId'");
+            $userCart = $connection -> query("SELECT * FROM `user-carts` WHERE `user-id` = '$userId'")
+            -> fetch_assoc();
 
             if ($userCart) {
-                $userCart = $userCart -> fetch_assoc();
                 $productsId = json_decode($userCart['products-id']);
 
-                if (count($productsId) < $quantity) {
-                    for ($i = count($productsId); $i < $quantity; $i++) {
+                if ($lastQuantity < $quantity) {
+                    for ($i = $lastQuantity; $i < $quantity; $i++) {
                         $productsId[] = $postProductId;
                     }
 
                     $newProductsId = $productsId;
                 }
 
-                else if (count($productsId) > $quantity) {
-                    for ($i = $quantity; $i < count($productsId); $i++) {
-                        $index = array_search($postProductId, $productsId);
-                        unset($productsId[$index]);
-                    }
-
+                else if ($lastQuantity > $quantity) {
                     $newProductsId = array();
+                    $quantityDiff = $lastQuantity - $quantity;
+                    $quantityIndex = 0;
 
                     for ($i = 0; $i < count($productsId); $i++) {
-                        if ($productsId[$i])
+                        if ($quantityIndex < $quantityDiff) {
+                            if ($productsId[$i] == $postProductId)
+                                $quantityIndex++;
+                            else
+                                $newProductsId[] = $productsId[$i];
+                        }
+
+                        else
                             $newProductsId[] = $productsId[$i];
                     }
                 }
+
+                else
+                    $newProductsId = $productsId;
             }
             
             else {
@@ -52,16 +61,22 @@
                 $newProductsId = array($postProductId);
             }
 
+            if (count($newProductsId) == 0)
+                $connection -> query("DELETE FROM `user-carts` WHERE `user-id` = '$userId'");
+
             $newProductsId = json_encode($newProductsId);
             $connection -> query("UPDATE `user-carts` SET `products-id` = '$newProductsId' WHERE `user-id` = '$userId'");
-
-            $productPrice = (int) $product['price'] * $quantity;
-            echo $productPrice;
+            
+            $postProduct = $connection -> query("SELECT * FROM `products` WHERE `product-id` = '$postProductId'")
+            -> fetch_assoc();
+            $productPrice = (int) ($postProduct['price'] * $quantity);
+            echo $quantity . ' ' . $productPrice;
 
             $totalPrice = 0; $totalQuantity = 0;
-            $newProductsId = json_decode($userCart['products-id']);
+            $newProductsId = json_decode($newProductsId);
 
-            foreach ($newProductsId as $productId) {
+            for ($i = 0; $i < count($newProductsId); $i++) {
+                $productId = $newProductsId[$i];
                 $product = $connection -> query("SELECT * FROM `products` WHERE `product-id` = '$productId'")
                 -> fetch_assoc();
 
@@ -70,14 +85,10 @@
             }
 
             echo ' ' . $totalPrice . ' ' . $totalQuantity;
-
             if (isset($product['prev-price'])) {
-                $prevPrice = (int) $product['prev-price'] * $quantity;
+                $prevPrice = (int) ($postProduct['prev-price'] * $quantity);
                 echo ' ' . $prevPrice;
             }
-
-            if (!count($newProductsId))
-                $connection -> query("DELETE FROM `user-carts` WHERE `user-id` = '$userId'");
         }
     }
 ?>

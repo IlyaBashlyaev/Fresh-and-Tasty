@@ -111,7 +111,7 @@
                                                     ?>
 
                                                     <div class="popup__product" id="<?= $id ?>">
-                                                        <input type="number" class="popup__quantity" oninput="preChangeQuantity(this, '<?= $id ?>')" value="<?= $repeatedId ?>">
+                                                        <input type="number" id="<?= $id ?>" class="popup__quantity" oninput="preChangeQuantity(this, '<?= $id ?>')" value="<?= $repeatedId ?>">
 
                                                         <div class="popup__sidebar">
                                                             <img class="popup__image" src="/<?= $product['image'] ?>">
@@ -294,8 +294,11 @@
         return ''
     }
 
-    var theme = getCookie('theme'),
-        totalPrice = <?= $totalPrice ?>, timerCQ
+    var theme = getCookie('theme'), timerCQ,
+        totalPrice = <?= $totalPrice ?>, lastQuantities = []
+    
+    const popupQuantities = document.querySelectorAll('.popup__quantity')
+    popupQuantities.forEach(popupQuantity => lastQuantities[popupQuantity.id] = parseInt(popupQuantity.value))
 
     if (theme == 'dark' || !theme) {
         document.body.className = 'dark'
@@ -332,49 +335,46 @@
         })
     }
 
-    function changeQuantity(input, productId) {
-        var quantity = input.value
-
-        if (quantity > 10) {
-            quantity = 10
-            input.value = 10
-        }
-
-        else if (quantity < 1) {
-            quantity = 1
-            input.value = 1
-        }
-
+    function changeQuantity(productId, quantity, lastQuantity) {
         $.ajax({
             url: '/includes/change-quantity.php',
             type: 'post',
             
             data: {
                 productId: productId,
-                quantity: quantity
+                quantity: quantity,
+                lastQuantity: lastQuantity
             },
 
             success: priceBlock => {
-                console.log(priceBlock)
                 priceBlock = priceBlock.split(' ')
 
-                const popupProduct = document.querySelector('.popup__product#' + productId),
-                      popupQuantity = document.querySelector('.popup__quantity'),
+                const popupProduct = document.querySelector(`.popup__product[id='${productId}']`),
+                      popupQuantities = document.querySelectorAll('.popup__quantity'),
+                      popupQuantityId = popupProduct.querySelector('.popup__quantity'),
                       popupPrice = popupProduct.querySelector('.popup__product-price'),
                       popupPrevPrice = popupProduct.querySelector('.popup__product-prev-price'),
                       popupTotalPrice = document.querySelector('.popup__price'),
                       quantity = document.querySelector('.quantity'),
                       paypalPaymentButton = document.querySelector('.paypal-payment-button')
-                
-                popupQuantity.removeAttribute('readonly')
-                totalPrice -= popupPrice.innerText
-                popupPrice.innerText = priceBlock[0] + ' €'
-                totalPrice = priceBlock[1]
-                quantity.innerText = priceBlock[2]
 
-                if (popupPrevPrice)
-                    popupPrevPrice.innerText = priceBlock[2]
-                popupTotalPrice.innerText = totalPrice + ' €'
+                popupQuantities.forEach(popupQuantity => {
+                    popupQuantity.removeAttribute('readonly')
+                })
+
+                if (priceBlock[1] == '0')
+                    popupProduct.remove()
+
+                else {
+                    popupQuantityId.value = priceBlock[0]
+                    popupPrice.innerText = priceBlock[1] + ' €'
+                    totalPrice = priceBlock[2]
+                    quantity.innerText = priceBlock[3]
+
+                    if (popupPrevPrice)
+                        popupPrevPrice.innerText = priceBlock[4] + ' €'
+                    popupTotalPrice.innerText = totalPrice + ' €'
+                }
 
                 document.querySelector('script.paypal').remove()
                 paypalPaymentButton.innerHTML = ''
@@ -389,9 +389,28 @@
     }
 
     function preChangeQuantity(input, productId) {
-        timerCQ = setTimeout(changeQuantity(input, productId), 500)
-        const popupQuantity = document.querySelector('.popup__quantity')
-        popupQuantity.setAttribute('readonly', '')
+        var quantity = parseInt(input.value),
+            lastQuantity = lastQuantities[input.id]
+
+        if (quantity > 10) {
+            quantity = 10
+            input.value = 10
+        }
+
+        else if (input.value < 1) {
+            quantity = 1
+            input.value = 1
+        }
+
+        if (quantity != lastQuantity) {
+            const popupQuantities = document.querySelectorAll('.popup__quantity')
+            popupQuantities.forEach(popupQuantity => {
+                popupQuantity.setAttribute('readonly', '')
+            })
+
+            timerCQ = setTimeout(changeQuantity(productId, quantity, lastQuantity), 500)
+            lastQuantities[input.id] = quantity
+        }
     }
 
     function showUserData() {

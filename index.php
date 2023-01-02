@@ -45,7 +45,7 @@
         <title>Fresh and Tasty</title>
     </head>
 
-    <body id='body' onmouseup="isMouseDown = false">
+    <body id='body' class="dark" onmouseup="isMouseDown = false">
         <?php
             require 'includes/header.php';
             echo '<script>var webView = ';

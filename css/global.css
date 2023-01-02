@@ -1014,7 +1014,7 @@ li {
     justify-content: center;
     gap: 20px;
   }
-  .logo,
+  header .logo,
   .header__search {
     margin-bottom: 20px;
   }
