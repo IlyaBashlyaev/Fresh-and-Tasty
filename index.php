@@ -214,8 +214,8 @@
                                             $phone = 'Unknown';
                                         }
 
-                                        $senderUsername = 'ibashlyaev2000@gmail.com';
-                                        $senderPassword = 'lonfhihknivtxdro';
+                                        $senderUsername = '';
+                                        $senderPassword = '';
 
                                         $mail = new PHPMailer();
                                         $mail -> isSMTP();
