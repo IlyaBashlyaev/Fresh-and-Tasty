@@ -95,11 +95,11 @@
             </form>
         </main>
 
-        <script src="https://www.google.com/recaptcha/api.js?render=6Ldq8ZwbAAAAAN98ra5XtDtLZoUrMg6TJmIHCHMm"></script>
+        <script src="https://www.google.com/recaptcha/api.js?render="></script>
         
         <script>
             grecaptcha.ready(function() {
-                grecaptcha.execute('6Ldq8ZwbAAAAAN98ra5XtDtLZoUrMg6TJmIHCHMm', {action: 'submit'}).then(function(token) {
+                grecaptcha.execute('', {action: 'submit'}).then(function(token) {
                     var response = document.querySelector('.token_response')
                     response.value = token
                 })
