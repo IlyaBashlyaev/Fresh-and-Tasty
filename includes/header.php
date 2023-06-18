@@ -1,5 +1,5 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery.redirect@1.1.4/jquery.redirect.min.js"></script>
-<script src="https://www.paypal.com/sdk/js?client-id=sb&disable-funding=credit,card&currency=EUR"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=sb&disable-funding=credit,card&currency=USD"></script>
 
 <?php
     if (isset($_SERVER['HTTP_X_REQUESTED_WITH']))
@@ -17,7 +17,7 @@
                         <a>Chat with us</a>
                     </li>
 
-                    <li class="header__contacts-item tel"><a href="tel:+491234567890">+49 123 456 78 90</a></li>
+                    <li class="header__contacts-item tel"><a href="tel:+11234567890">+1 123 456 78 90</a></li>
                     <li class="header__contacts-item email"><a href="mail:info@fresh-and-tasty.com">info@fresh-and-tasty.com</a></li>
                 </ul>
 
@@ -124,12 +124,12 @@
 
                                                         <div class="popup__content">
                                                             <div class="popup__product-title"><?= $product['title'] ?></div>
-                                                            <div class="popup__product-price"><?= (int) $product['price'] * $repeatedId ?> €</div>
+                                                            <div class="popup__product-price"><?= (int) $product['price'] * $repeatedId ?> $</div>
 
                                                             <?php
                                                                 if (isset($product['prev-price'])) {
                                                                     ?>
-                                                                    <div class="popup__product-prev-price"><?= (int) $product['prev-price'] * $repeatedId ?> €</div>
+                                                                    <div class="popup__product-prev-price"><?= (int) $product['prev-price'] * $repeatedId ?> $</div>
                                                                     <?php
                                                                 }
                                                             ?>
@@ -144,7 +144,7 @@
                                         <div class="popup__price-block">
                                             <div class="popup__total-price">
                                                 <div class="popup__price-title">Total price:</div>
-                                                <div class="popup__price"><?= $totalPrice ?> €</div>
+                                                <div class="popup__price"><?= $totalPrice ?> $</div>
                                             </div>
 
                                             <div class="pay">
@@ -168,7 +168,7 @@
                                     -> fetch_assoc();
                             
                             if ($user)
-                                echo 'onclick="showUserData()"';
+                                echo 'onclick="addUserData(this)"';
                             else
                                 echo 'href="/login.php"';
                         }
@@ -181,6 +181,26 @@
                             <path d="M12 11.98C14.7614 11.98 17 9.74141 17 6.97998C17 4.21856 14.7614 1.97998 12 1.97998C9.23858 1.97998 7 4.21856 7 6.97998C7 9.74141 9.23858 11.98 12 11.98Z" stroke="#151515" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="bevel"/>
                         </svg>
                     </a>
+
+                    <div class="user-data" style="display: none;">
+                        <div class="user-data-table">
+                            <div class="parameters">
+                                <div class="paramater"><a>Name</a></div>
+                                <div class="paramater"><a>Email</a></div>
+                                <div class="paramater"><a>Phone</a></div>
+                            </div>
+
+                            <div class="values">
+                                <div class="value"><a></a></div>
+                                <div class="value"><a></a></div>
+                                <div class="value"><a></a></div>
+                            </div>
+                        </div>
+
+                        <div class="sign-out">
+                            <a onclick="signOut()">Sign out</a>
+                        </div>
+                    </div>
 
                     <a class="header__user-cart" onclick="showPopup()">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -270,6 +290,28 @@
 <script>
     const icon = document.querySelector('.header__user-dark-mode')
 
+    $.ajax({
+        url: '/includes/show-user-data.php',
+        type: 'post',
+        data: {},
+        success: userData => {
+            userData = JSON.parse(userData)
+            const userDataEl = document.querySelector('.user-data'),
+                  values = userDataEl.querySelectorAll('.value > a')
+            
+            userDataEl.style.display = 'flex'
+            for (var i = 0; i < 3; i++) {
+                values[i].innerText = userData[i]
+            }
+
+            if (window.innerWidth <= 750) {
+                const headerUser = document.querySelector('.header__user'),
+                      userData = document.querySelector('.user-data')
+                userData.style.left = (headerUser.offsetWidth - userData.offsetWidth) / 2 + 'px';
+            }
+        }
+    })
+
     function setCookie(name, value) {
         const date = new Date()
         date.setTime(date.getTime() + 315360000000)
@@ -292,6 +334,11 @@
         }
 
         return ''
+    }
+
+    function signOut() {
+        document.cookie = 'id=;expires=Thu, 01 Jan 1970 00:00:00 GMT'
+        location.reload()
     }
 
     var theme = getCookie('theme'), timerCQ,
@@ -325,7 +372,7 @@
                         quantity = document.querySelector('.quantity')
                 
                 popupProduct.remove()
-                popupTotalPrice.innerText = parseInt(popupTotalPrice.innerText) - parseInt(priceBlock[0]) + ' €'
+                popupTotalPrice.innerText = parseInt(popupTotalPrice.innerText) - parseInt(priceBlock[0]) + ' $'
             
                 if (priceBlock[1] != '0')
                     quantity.innerText = priceBlock[1]
@@ -367,13 +414,13 @@
 
                 else {
                     popupQuantityId.value = priceBlock[0]
-                    popupPrice.innerText = priceBlock[1] + ' €'
+                    popupPrice.innerText = priceBlock[1] + ' $'
                     totalPrice = priceBlock[2]
                     quantity.innerText = priceBlock[3]
 
                     if (popupPrevPrice)
-                        popupPrevPrice.innerText = priceBlock[4] + ' €'
-                    popupTotalPrice.innerText = totalPrice + ' €'
+                        popupPrevPrice.innerText = priceBlock[4] + ' $'
+                    popupTotalPrice.innerText = totalPrice + ' $'
                 }
 
                 document.querySelector('script.paypal').remove()
@@ -413,22 +460,16 @@
         }
     }
 
-    function showUserData() {
-        $.ajax({
-            url: '/includes/show-user-data.php',
-            type: 'post',
-            data: {},
-            success: userData => {
-                userData = JSON.parse(userData)
+    function addUserData(userAccount) {
+        const userData = document.querySelector('.user-data')
+        userAccount.setAttribute('onclick', 'removeUserData(this)')
+        userData.classList.add('clicked')
+    }
 
-                var username = userData[0],
-                    email = userData[1],
-                    phone = userData[2]
-                
-                if (!webView)
-                    alert(`Username: ${username}\nEmail: ${email}\nPhone: ${phone}`)
-            }
-        })
+    function removeUserData(userAccount) {
+        const userData = document.querySelector('.user-data')
+        userAccount.setAttribute('onclick', 'addUserData(this)')
+        userData.classList.remove('clicked')
     }
 
     function validatePhone(phone) {
@@ -482,5 +523,17 @@
             if (popup)
                 popup.classList.remove('active')
         }
+    })
+
+    window.addEventListener('resize', () => {
+        const userData = document.querySelector('.user-data')
+
+        if (window.innerWidth <= 750) {
+            const headerUser = document.querySelector('.header__user')
+            userData.style.left = (headerUser.offsetWidth - userData.offsetWidth) / 2 + 'px'
+        }
+
+        else
+            userData.style.removeProperty('left')
     })
 </script>

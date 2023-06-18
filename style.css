@@ -228,6 +228,15 @@ body.dark .inner-form-input {
     color: #eee;
 }
 
+body.dark .inner-form-input.wrong {
+    background-color: #782828;
+    border: 1vh solid #2d0000;
+}
+
+body.dark .inner-form-input.wrong::placeholder {
+    color: #2d0000;
+}
+
 .inner-form-input.password {
     width: calc(50vw - 9vh);
 }

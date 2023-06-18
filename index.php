@@ -178,7 +178,7 @@
                                     ($ik_co_id == '621fa5dd8640c862c864953a' && $ik_inv_st == 'success') ||
                                     (
                                         isset($paymentDetails['id']) && $paymentDetails['intent'] == 'CAPTURE' && $paymentDetails['status'] == 'COMPLETED' &&
-                                        $amount['currency_code'] == 'EUR'
+                                        $amount['currency_code'] == 'USD'
                                     )
                                 ) {
                                     $repeatedIds = array();
@@ -214,8 +214,8 @@
                                             $phone = 'Unknown';
                                         }
 
-                                        $senderUsername = '';
-                                        $senderPassword = '';
+                                        $senderUsername = 'ibashlyaev2000@gmail.com';
+                                        $senderPassword = 'lonfhihknivtxdro';
 
                                         $mail = new PHPMailer();
                                         $mail -> isSMTP();
@@ -233,14 +233,14 @@
                                         if ($email) $mail -> addAddress($email);
                                         $mail -> isHTML();
 
-                                        $body = "<i>Hi! Products have just been purchased from our website by a customer.</i><br><br>
+                                        $body = "<i>Hi! You have just been purchased from our website.</i><br><br>
 
-Customer contact details:<br>
+Your contact details:<br>
 - Username: <b>$username</b>.<br>
 - Email: <b>$email</b>.<br>
 - Phone: <b>$phone</b>.<br><br>
 
-Products that have been purchased by a customer:<br>";
+Products that you have been purchased:<br>";
 
                                         foreach ($repeatedIds as $id => $repeatedId) {
                                             $product = $connection -> query("SELECT * FROM `products` WHERE `product-id` = '$id'")
@@ -266,11 +266,13 @@ Products that have been purchased by a customer:<br>";
                                             $address = '';
 
                                         if ($address) {
-                                            $body .= "<br>The data of user for the shipping:<br>
+                                            $body .= "<br>Your data for the shipping:<br>
 - Addres: <b>" . $address['address_line_1'] . "</b><br>
 - City: <b>" . $address['admin_area_2'] . "</b><br>
 - Postal Code: <b>" . $address['postal_code'] . "</b><br>
-- Country Code: <b>" . $address['country_code'] . "</b>";
+- Country Code: <b>" . $address['country_code'] . "</b><br>
+
+<br><i>We will also phone you in few minutes by your phone number.</i>";
                                         }
 
                                         $mail -> Subject = 'New order';
@@ -539,13 +541,13 @@ Products that have been purchased by a customer:<br>";
 
                                             <div class="products__item-buy">
                                                 <div class="cost">
-                                                    <?= $product['price'] ?> €
+                                                    <?= $product['price'] ?> $
                                                     <div class="prev-cost"><?php
                                                         $hasDiscount = false;
 
                                                         if ($product['prev-price']) {
                                                             $hasDiscount = true;
-                                                            echo $product['prev-price'] . ' €';
+                                                            echo $product['prev-price'] . ' $';
                                                         }
                                                     ?></div>
                                                 </div>
@@ -605,8 +607,8 @@ Products that have been purchased by a customer:<br>";
 
                                         <div class="products__item-buy">
                                             <div class="cost" style="line-height: 27px;">
-                                                <?= $product['price'] ?> €
-                                                <div class="prev-cost"><?= $product['prev-price'] ?> €</div>
+                                                <?= $product['price'] ?> $
+                                                <div class="prev-cost"><?= $product['prev-price'] ?> $</div>
                                             </div>
 
                                             <div class="products__btn button" onclick="addToCart('<?= $product['product-id'] ?>')">Buy now</div>
@@ -633,10 +635,9 @@ Products that have been purchased by a customer:<br>";
             var isProductsShowed = true,
                 timerRP, lastScrollY, scrollPoint
 
-            if (theme == 'dark') {
+            if (theme == 'light') {
                 const icon = document.querySelector('.header__user-dark-mode')
-                document.body.className = 'dark'
-                icon.innerHTML = '<i class="far fa-moon"></i>'
+                document.body.className = ''
             }
 
             function removeWaterMark() {
