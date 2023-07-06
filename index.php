@@ -178,7 +178,7 @@
                                     ($ik_co_id == '621fa5dd8640c862c864953a' && $ik_inv_st == 'success') ||
                                     (
                                         isset($paymentDetails['id']) && $paymentDetails['intent'] == 'CAPTURE' && $paymentDetails['status'] == 'COMPLETED' &&
-                                        $amount['currency_code'] == 'USD'
+                                        $amount['currency_code'] == 'EUR'
                                     )
                                 ) {
                                     $repeatedIds = array();
@@ -215,7 +215,7 @@
                                         }
 
                                         $senderUsername = 'ibashlyaev2000@gmail.com';
-                                        $senderPassword = 'lonfhihknivtxdro';
+                                        $senderPassword = '';
 
                                         $mail = new PHPMailer();
                                         $mail -> isSMTP();
@@ -487,7 +487,7 @@ Products that you have been purchased:<br>";
                         ?>
 
                         <div class="price">
-                            <h3 class="title">Price</h3>
+                            <h3 class="title">Price (in €)</h3>
 
                             <div class="price__limit">
                                 <input type="number" name="min" class="min-price" oninput="priceCheck()" value="0">
@@ -541,7 +541,7 @@ Products that you have been purchased:<br>";
 
                                             <div class="products__item-buy">
                                                 <div class="cost">
-                                                    <?= $product['price'] ?> $
+                                                    <?= $product['price'] ?> €
                                                     <div class="prev-cost"><?php
                                                         $hasDiscount = false;
 
@@ -607,8 +607,8 @@ Products that you have been purchased:<br>";
 
                                         <div class="products__item-buy">
                                             <div class="cost" style="line-height: 27px;">
-                                                <?= $product['price'] ?> $
-                                                <div class="prev-cost"><?= $product['prev-price'] ?> $</div>
+                                                <?= $product['price'] ?> €
+                                                <div class="prev-cost"><?= $product['prev-price'] ?> €</div>
                                             </div>
 
                                             <div class="products__btn button" onclick="addToCart('<?= $product['product-id'] ?>')">Buy now</div>

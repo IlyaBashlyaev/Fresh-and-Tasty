@@ -47,7 +47,7 @@
         $productsId = implode(' ', $productsId);
         setcookie('products-id', $productsId, time() + 315360000);
 
-        $string = file_get_contents('https://www.google.com/search?q=1+dollar+in+hryvnia');
+        $string = file_get_contents('https://www.google.com/search?q=1+euro+in+hryvnia');
         libxml_use_internal_errors(true);
         $html = new DOMDocument();
         $html -> loadHTML($string);
@@ -76,7 +76,7 @@
         <script>
             $.redirect('https://sci.interkassa.com', {
                 ik_co_id: '<?php
-                    if ($_SERVER['HTTP_HOST'] == '79.216.27.254')
+                    if ($_SERVER['HTTP_HOST'] == '91.35.124.220')
                         echo '621fa5dd8640c862c864953a';
                     else if ($_SERVER['HTTP_HOST'] == 'fresh-and-tasty-2.000webhostapp.com')
                         echo '63aedc99ed4e0b2228e76b0f';

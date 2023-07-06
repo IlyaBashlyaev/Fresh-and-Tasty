@@ -1,5 +1,5 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery.redirect@1.1.4/jquery.redirect.min.js"></script>
-<script src="https://www.paypal.com/sdk/js?client-id=sb&disable-funding=credit,card&currency=USD"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=sb&disable-funding=credit,card&currency=EUR"></script>
 
 <?php
     if (isset($_SERVER['HTTP_X_REQUESTED_WITH']))
@@ -17,7 +17,7 @@
                         <a>Chat with us</a>
                     </li>
 
-                    <li class="header__contacts-item tel"><a href="tel:+11234567890">+1 123 456 78 90</a></li>
+                    <li class="header__contacts-item tel"><a href="tel:+491234567890">+49 123 456 78 90</a></li>
                     <li class="header__contacts-item email"><a href="mail:info@fresh-and-tasty.com">info@fresh-and-tasty.com</a></li>
                 </ul>
 
