@@ -30,16 +30,6 @@
 
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/global.css">
-        
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-LGSS1RFWS4"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-
-            gtag('config', 'G-LGSS1RFWS4');
-        </script>
 
         <script class="paypal" src="includes/paypal.js" defer></script>
         <title>Fresh and Tasty</title>
