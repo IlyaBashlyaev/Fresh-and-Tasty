@@ -247,7 +247,7 @@
     if (isset($_POST['type'])) {
         if ($_POST['type'] == 'TempUser') {
             if (isset($_POST['token_response'])) {
-                $secret_key = '6Ldq8ZwbAAAAAOqt5r3tuMeglZP1DpiXnV6nPWll';
+                $secret_key = '';
                 $recaptcha_response = $_POST['token_response'];
                 $url = "https://www.google.com/recaptcha/api/siteverify?secret=$secret_key&response=$recaptcha_response";
 
